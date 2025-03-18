@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <!--Đây là tiêu đề-->
+    <title>LUMISKIN - Đổi Trả</title>
+<!--tỷ lệ xem-->
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon:định nghĩa biểu tượng của trang wed hiển thị trên trình duyệt -->
+    <link href="img/favicon.png" rel="icon">
+
+    <!-- Google Web Fonts cải thiện tốc độ tải trang 2 font open sans 400,500:lora 600,500-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&family=Lora:wght@600;700&display=swap" rel="stylesheet"> 
+
+    <!-- Icon Font Stylesheet biểu tượng và font icon:font-awesome và bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet thư viện hỗ trợ -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet nhúng bootstrap giúp tạo giao diện wed dễ dàng hơn -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet style.css chứa tùy chỉnh giao diện riêng của trang wed -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+   
+   <!-- Spinner Start -->
+    <!--show: Mặc định hiển thị.
+bg-white: Nền màu trắng.
+position-fixed: Cố định trên màn hình.
+w-100 vh-100: Chiếm toàn bộ chiều rộng (w-100) và chiều cao (vh-100) của màn hình.
+top-50 start-50 translate-middle: Căn giữa màn hình.
+d-flex align-items-center justify-content-center: Sử dụng Flexbox để căn giữa.
+-->
+    <div
+   id="spinner"
+   class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center"
+ >
+   <div class="spinner-border text-primary" role="status"></div>
+ </div>
+ <!-- Spinner End -->
+
+ <!-- Navbar Start -->
+  <!-- Top bar điều hướng trên cùng. ontainer-fluid: Tạo một container kéo dài toàn bộ chiều rộng trang.
+fixed-top: Cố định thanh này ở đầu trang khi cuộn xuống.
+px-0: Xóa padding trái/phải.
+wow fadeIn + data-wow-delay="0.1s": Dùng WOW.js để tạo hiệu ứng mờ dần khi xuất hiện.-->
+
+ <div class="container-fluid fixed-top px-0 wow fadeIn"data-wow-delay="0.1s">
+   <div class="top-bar row gx-0 align-items-center d-none d-lg-flex">
+    <!--Phần bên trái thông tin liên hệ:col-lg-6: Chia 6/12 cột (50%) trên màn hình lớn.
+px-5 text-start: Thêm padding ngang và căn lề trái.
+<small>: Văn bản nhỏ gọn.
+<i class="fa fa-map-marker-alt me-2"></i>: Biểu tượng bản đồ (địa chỉ).
+<i class="fa fa-envelope me-2"></i>: Biểu tượng email.-->
+     <div class="col-lg-6 px-5 text-start">
+       <small
+         ><i class="fa fa-map-marker-alt me-2"></i>02 Võ Oanh, Bình Thạnh, TP.HCM</small
+       >
+       <small class="ms-4"
+         ><i class="fa fa-envelope me-2"></i>lumiskinhere@gmail.com</small
+       >
+       <!--Phần bên phải mạng xã hội text-body ms-3:màu chữ mặc định+margin bên trái-->
+     </div>
+     <div class="col-lg-6 px-5 text-end">
+       <small>Follow us:</small>
+       <a class="text-body ms-3" href=""
+         ><i class="fab fa-facebook-f"></i
+       ></a>
+       <a class="text-body ms-3" href=""><i class="fab fa-twitter"></i></a>
+       <a class="text-body ms-3" href=""
+         ><i class="fab fa-linkedin-in"></i
+       ></a>
+       <a class="text-body ms-3" href=""><i class="fab fa-instagram"></i></a>
+     </div>
+   </div>
+<!--thanh điều hướng navbar
+navbar-expand-lg: Khi màn hình lớn (lg), menu sẽ hiển thị đầy đủ. Trên màn hình nhỏ hơn, nó sẽ thu gọn thành biểu tượng ☰ (menu toggler).
+navbar-light: Tạo navbar với nền sáng (text màu tối).
+py-lg-0 px-lg-5:
+py-lg-0: Loại bỏ padding dọc trên màn hình lớn.
+px-lg-5: Thêm padding ngang cho giao diện lớn.-->
+   <nav
+     class="  navbar navbar-expand-lg navbar-light py-lg-0 px-lg-5 wow fadeIn"
+     data-wow-delay="0.1s"
+   >
+      <!--<a href="index.html"> → Khi nhấp vào logo, sẽ trở về trang chủ.
+navbar-brand: Định nghĩa thương hiệu trong Bootstrap Navbar.
+ms-4 ms-lg-0:
+ms-4: Thêm margin trái trên màn hình nhỏ.
+ms-lg-0: Không có margin trái trên màn hình lớn.
+<h1 class="fw-bold text-primary m-0">:
+fw-bold: Chữ đậm (font-weight: bold).
+text-primary: Màu chữ chính (thường là màu chủ đạo của trang).
+m-0: Xóa margin.
+<span class="text-secondary">:
+text-secondary: Màu chữ phụ.
+img/logo.webp: Đường dẫn hình ảnh logo.
+alt="Image": Văn bản thay thế khi hình ảnh không tải được.-->
+      <a href="index.html" class="navbar-brand ms-4 ms-lg-0">
+       <h1 class="fw-bold text-primary m-0">
+         <span class="text-secondary">
+         <img class="logo" src="img/logo.png" alt="Image" />
+         </span>
+       </h1>
+     </a>
+     <!--nút thu gọn menu trên thiết bị nhỏ-->
+     <button
+       type="button"
+       class="navbar-toggler me-4"
+       data-bs-toggle="collapse"
+       data-bs-target="#navbarCollapse"
+     >
+       <span class="navbar-toggler-icon"></span>
+     </button>
+     <div class="collapse navbar-collapse" id="navbarCollapse">
+       <div class="navbar-nav top ms-auto p-lg-0">
+         <!-- <a href="index.html" class="nav-item nav-link active">Home</a>
+         <a href="about.html" class="nav-item nav-link">About Us</a>
+         
+         <div class="nav-item dropdown">
+           <a
+             href="#"
+             class="nav-link dropdown-toggle"
+             data-bs-toggle="dropdown"
+             >Products</a
+           >
+             <div class="dropdown-menu">
+               <a href="blog.html" class="dropdown-item">Chăm sóc da</a> 
+               <a href="feature.html" class="dropdown-item">Make Up</a>
+               <a href="testimonial.html" class="dropdown-item">Ưu đãi đặc biệt</a>
+           </div>
+         </div>
+        
+         <a href="contact.html" class="nav-item nav-link">Contact Us</a>
+          -->
+         <!--<ul>: Bắt đầu danh sách các mục menu chính.
+<li><a href="index.html">Home</a></li>:
+Đây là mục đầu tiên (Trang chủ - Home).
+Khi bấm vào, trang sẽ chuyển đến index.html.-->
+<!--<li class="drop-menu">:
+Đây là mục menu chính chứa menu con (dropdown).
+drop-menu: Class CSS để tạo hiệu ứng thả xuống.
+<a href="product.html">Products<span>&#11167</span></a>:
+href="product.html": Khi nhấp vào Products, trang sẽ chuyển đến product.html.
+<span>&#11167;</span>:
+Biểu tượng mũi tên xuống &#11167; (⬇) báo hiệu rằng đây là một menu thả xuống.
+img/submenu.webp: Hình ảnh minh họa trong menu con.-->
+          <div class=" menu" id="navar">
+           <ul>
+             <li>
+               <a href="index.html">Home</a>
+             </li>
+             <li class="drop-menu">
+               <a href="product.html">Products<span>&#11167</span></a>
+               <div class="sub-menu">
+                 <ul>
+                   <li>
+                   <img class="logo-submenu" src="img/logo-submenu.jpg" alt="Image" />
+                   </li>
+                 </ul>
+                 <!--danh mục sản phẩm-->
+                 <ul>
+                   <li><h4 class="submenu-h4">Trang điểm</h4></li>
+                   <li><a href="#">Kem nền</a> </li>
+                   <li><a href="#">Phấn phủ</a> </li>
+                   <li><a href="#">Phấn mắt</a> </li>
+                   <li><a href="#">Eyeliner</a> </li>
+                   <li><a href="#">Son môi</a> </li>
+                 </ul>
+                 <ul>
+                   <li><h4 class="submenu-h4">Dưỡng da</h4></li>
+                   <li><a href="#">Mặt nạ</a> </li>
+                   <li><a href="#">Serum</a> </li>
+                   <li><a href="#">Phấn mắt</a> </li>
+                   <li><a href="#">Eyeliner</a> </li>
+                   <li><a href="#">Tẩy trang</a> </li>
+                 </ul>
+                 <ul>
+                   <li><h4 class="submenu-h4">Sản phẩm khác</h4></li>
+                   <li><a href="#">Kem nền</a> </li>
+                   <li><a href="#">Phấn phủ</a> </li>
+                   <li><a href="#">Phấn mắt</a> </li>
+                   <li><a href="#">Eyeliner</a> </li>
+                   <li><a href="#">Son môi</a> </li>
+                 </ul>
+                 
+               </div>
+             </li>
+             <!--menu con about us-->
+             <li class="drop-two">
+                <a href="#">About us <span>&#11167</span></a>
+                <div class="menu-two">
+                  <ul>
+                    <li><a href="contact.html">Liên hệ với chúng tôi</a> </li>
+                    <li><a href="about.html">Về Cosmetics</a></li>
+                    <li><a href="#">Đổi trả sản phẩm</a></li>
+                  </ul>
+                </div>
+              </li>
+           </ul>
+         </div>
+       </div>
+        <!--Phần tìm kiếm  <div class="d-none d-lg-flex ms-2">:
+d-none d-lg-flex: Ẩn trên màn hình nhỏ, chỉ hiển thị khi màn hình lớn (lg).
+Tạo form tìm kiếm:
+id="search-box": Xác định hộp tìm kiếm.
+placeholder="Bạn muốn tìm gì?": Văn bản gợi ý bên trong ô tìm kiếm.
+<button> chứa biểu tượng kính lúp (fa-search).
+Nếu cần chức năng tìm kiếm thật sự, backend phải xử lý giá trị nhập vào.-->
+       <div class="d-none d-lg-flex ms-2">
+         <form action="" id="search-box">
+           <input type="text" id="search-text" placeholder="Bạn muốn tìm gì?" required>
+           <button id="search-btn"><small class="fa fa-search text-body"></small></button>
+         </form>
+           <!--tài khoản và giỏ hàng-->
+         </a>
+         <a class="btn-sm-square bg-white rounded-circle ms-3" href="admin.html">
+           <small class="fa fa-user text-body"></small>
+         </a>
+         <a class="btn-sm-square bg-white rounded-circle ms-3" href="shopping-cart.html">
+           <small class="fa fa-shopping-bag text-body"></small>
+         </a>
+       </div>
+     </div>
+   </nav>
+ </div>
+ 
+ <!-- Navbar End -->
+  <!--bố cục tổng quát-->   
+ <div class="container-xxl py-5">
+  <div class="container">
+      <div class="row g-5 align-items-center lie">
+        <!--hình ảnh minh họa-->
+          <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
+           
+              <div class="about-img position-relative overflow-hidden  pe-0">
+                  <img class="img-fluid w-100" src="img/l2.jpg">
+              </div>
+          </div>
+          <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
+              <h1 class="display-5 mb-4">Chính sách đổi trả của LUMISKIN</h1>
+              <p  style="font-weight: bolder;">1. Điều kiện đổi trả</p>
+              <p class="mb-4">Quý Khách hàng cần kiểm tra tình trạng hàng hóa và có thể đổi hàng/ trả lại hàng ngay tại thời điểm giao/nhận hàng trong những trường hợp sau:</p>
+              <p><i class="fa fa-check text-primary me-3"></i>Hàng không đúng chủng loại, mẫu mã trong đơn hàng đã đặt hoặc như trên website tại thời điểm đặt hàng.</p>
+              <p><i class="fa fa-check text-primary me-3"></i>Không đủ số lượng, không đủ bộ như trong đơn hàng.</p>
+              <p><i class="fa fa-check text-primary me-3"></i>Hàng bị hư hỏng do vận chuyển hoặc hết hạn sử dụng.</p>
+              <p class="mb-4">Khách hàng có trách nhiệm trình giấy tờ liên quan chứng minh sự thiếu sót trên để hoàn thành việc hoàn trả/đổi trả hàng hóa. </p>
+              <p class="mb-4">Khách hàng phải quay video khui hàng.</p>
+              <p class="mb-4">Chúng tôi sẽ không chịu trách nhiệm nếu quý khách không kiểm tra tình trạng hàng hóa ngay tại thời điểm giao nhận.</p>
+
+              <p style="font-weight: bolder;">2. Quy định về thời gian thông báo và gửi sản phẩm đổi trả</p>
+              <p><i class="fa fa-check text-primary me-3"></i><strong>Thời gian thông báo đổi trả:</strong> trong vòng 48h kể từ khi nhận sản phẩm</p>
+              <p><i class="fa fa-check text-primary me-3"></i><strong>Thời gian gửi chuyển trả sản phẩm:</strong> trong vòng 3 ngày kể từ khi nhận sản phẩm.</p>
+              <p><i class="fa fa-check text-primary me-3"></i><strong>Tình trạng hàng đổi trả:</strong> Sản phẩm chưa qua sử dụng, còn nguyên bao bì đóng gói, đầy đủ phụ kiện, tem cùng quà tặng kèm. Bao bì sản phẩm không bị dơ, bễ, vỡ, có mùi lạ hoặc có dấu hiệu bảo quản không đúng với hướng dẫn sử dụng.</p>
+              <p><i class="fa fa-check text-primary me-3"></i><strong>Địa điểm đổi trả sản phẩm:</strong> Khách hàng có thể mang hàng trực tiếp đến văn phòng/ cửa hàng của chúng tôi hoặc chuyển qua đường bưu điện.</p>
+              <p class="mb-4">Trong trường hợp Quý Khách hàng có ý kiến đóng góp/khiếu nại liên quan đến chất lượng sản phẩm. Quý Khách hàng vui lòng liên hệ đường dây chăm sóc khách hàng  vào mục <a href="contact.html">Liên hệ chúng tôi</a> để nhắn tin cho shop.</p>
+              
+          </div>
+      </div>
+  </div>
+</div>
+ <!-- header -->
+
+
+ <!--Container chính của Footer container-fluid bg-dark footer:
+container-fluid: Chiếm toàn bộ chiều rộng màn hình.
+bg-dark: Nền màu tối (đen/xám đậm).
+Khoảng cách (mt-5 pt-5 py-5):
+mt-5: Thêm margin-top để tách footer khỏi nội dung trên.
+pt-5 py-5: Tạo padding trên và dưới, giúp bố cục thoáng hơn.
+Hiệu ứng xuất hiện (wow fadeIn):
+Làm footer mờ dần hiện lên khi tải trang.-->
+   <!-- Footer Start -->
+   <div
+   class="container-fluid bg-dark footer mt-5 pt-5 wow fadeIn"
+   data-wow-delay="0.1s"
+ >
+   <div class="container py-5">
+     <div class="row g-5">
+           <div class="col-lg-3 col-md-6">
+               <h1 class="fw-bold text-primary mb-4">
+                   <span class="text-secondary">
+                       <img class="logo" src="img/logo.png" alt="Image" />
+                   </span>
+               </h1>
+               <p>
+                   We hope our products will make you feel more satisfied and comfortable.
+               </p>
+               <div class="d-flex pt-2">
+                   <a
+                   class="btn btn-square btn-outline-light rounded-circle me-1"
+                   href=""
+                   ><i class="fab fa-twitter"></i
+                   ></a>
+                   <a
+                   class="btn btn-square btn-outline-light rounded-circle me-1"
+                   href=""
+                   ><i class="fab fa-facebook-f"></i
+                   ></a>
+                   <a
+                   class="btn btn-square btn-outline-light rounded-circle me-1"
+                   href=""
+                   ><i class="fab fa-youtube"></i
+                   ></a>
+                   <a
+                   class="btn btn-square btn-outline-light rounded-circle me-0"
+                   href=""
+                   ><i class="fab fa-linkedin-in"></i
+                   ></a>
+               </div>
+           </div>
+           <div class="col-lg-3 col-md-6">
+           <h4 class="text-light mb-4">Developed by</h4>
+           <p>Mai Liêm Trực</p>
+           <p>Hồ Phát Đạt</p>
+           <p>Lê Trung Đại</p>
+           <p>Phạm Minh Vinh Quang</p>
+           <p>Trần Trung Tín</p>
+           </div>
+           <div class="col-lg-3 col-md-6">
+           <h4 class="text-light mb-4">Quick Links</h4>
+           <a class="btn btn-link" href="index.html">Home</a>
+           <a class="btn btn-link" href="product.html">Products</a>
+           <a class="btn btn-link" href="contact.html">About Us</a>
+           <!-- <a class="btn btn-link" href="">Our Services</a>
+           <a class="btn btn-link" href="">Terms & Condition</a>
+           <a class="btn btn-link" href="">Support</a> -->
+           </div>
+           <div class="col-lg-3 col-md-6">
+           <h4 class="text-light mb-4">Socials</h4>
+           <p><i class="fas fa-envelope"></i> lumiskinhere@gmail.com</p>
+           <p><i class="fab fa-facebook-f"></i> fb.lumiskinhere</p>
+           </div>
+       </div>
+   </div>
+   <div class="container-fluid copyright">
+     <div class="container">
+       <div class="row">
+         <div class="col-md-6 text-md-start mb-3 mb-md-0">
+           &copy; <a href="#">LumiSkin.shop</a>, All Right Reserved.
+         </div>
+       </div>
+     </div>
+   </div>
+ </div>
+ <!-- Footer End -->
+
+ <!-- Back to Top Nút này giúp người dùng quay lại đầu trang khi nhấn vào.
+href="#": Điều hướng lên đầu trang.
+btn btn-lg btn-pink: Tạo nút lớn với màu hồng.
+btn-lg-square rounded-circle: Làm cho nút có dạng hình tròn.
+back-to-top: Class này có thể liên kết với JavaScript để thêm hiệu ứng.
+-->
+ <a
+   href="#"
+   class="btn btn-lg btn-pink btn-lg-square rounded-circle back-to-top"
+   ><i class="bi bi-arrow-up"></i
+ ></a>
+<!--thư viện -->
+  <!-- JavaScript Libraries -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="lib/wow/wow.min.js"></script>
+  <script src="lib/easing/easing.min.js"></script>
+  <script src="lib/waypoints/waypoints.min.js"></script>
+  <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+  <!-- Template Javascript -->
+  <script src="js/main.js"></script>
+</body>
+
+</html>
