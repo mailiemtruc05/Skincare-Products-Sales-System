@@ -83,3 +83,11 @@ $(".next-btn").on("click", function (e) {
     }
   });
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get("logout") === "true") {
+    alert("Bạn đã đăng xuất thành công!");
+  }
+});
+
