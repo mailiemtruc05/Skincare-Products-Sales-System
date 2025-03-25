@@ -1,24 +1,34 @@
 <!DOCTYPE html>
-<html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quản lý Sản Phẩm</title>
-    <link rel="stylesheet" href="css/styles.css" />
-  </head>
-  <body>
-    <div class="container">
-      <h1>Quản lý Sản Phẩm</h1>
-      <form id="productForm">
-        <input type="text" id="productName" placeholder="Tên sản phẩm" required />
-        <input type="number" id="productPrice" placeholder="Giá sản phẩm" required />
-        <textarea id="productDescription" placeholder="Mô tả sản phẩm" required></textarea>
-        <input type="text" id="productImage" placeholder="Đường dẫn hình ảnh" required />
-        <button type="submit">Thêm sản phẩm</button>
-      </form>
-      <h2>Danh sách sản phẩm</h2>
-      <ul id="productList"></ul>
-    </div>
-    <script src="js/script.js"></script>
-  </body>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LUMISKIN - Quản lý Sản Phẩm</title>
+  <link th:href="@{/css/styles.css}" rel="stylesheet" />
+  <link th:href="@{/img/favicon.png}" rel="icon">
+</head>
+<body>
+<div class="container">
+  <h1>Quản lý Sản Phẩm</h1>
+  <form id="productForm" th:action="@{/products/add}" method="post">
+    <input type="text" id="productName" name="name" placeholder="Tên sản phẩm" required />
+    <input type="number" id="productPrice" name="price" placeholder="Giá sản phẩm" required />
+    <textarea id="productDescription" name="description" placeholder="Mô tả sản phẩm" required></textarea>
+    <input type="text" id="productImage" name="image" placeholder="Đường dẫn hình ảnh" required />
+    <button type="submit">Thêm sản phẩm</button>
+  </form>
+
+  <h2>Danh sách sản phẩm</h2>
+  <ul id="productList">
+    <li th:each="product : ${products}">
+      <img th:src="${product.image}" alt="Hình ảnh sản phẩm" width="100" />
+      <h3 th:text="${product.name}"></h3>
+      <p th:text="'Giá: ' + ${product.price} + ' VND'"></p>
+      <p th:text="${product.description}"></p>
+    </li>
+  </ul>
+</div>
+
+<script th:src="@{/js/script.js}"></script>
+</body>
 </html>
