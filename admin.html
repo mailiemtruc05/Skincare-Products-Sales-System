@@ -4,8 +4,6 @@
     <meta charset="utf-8">
     <title>LUMISKIN - Tài Khoản</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="" name="keywords">
-    <meta content="" name="description">
 
     <!-- Favicon -->
     <link href="img/favicon.png" rel="icon">
@@ -26,69 +24,108 @@
     <!-- Customized Bootstrap Stylesheet -->
     <link href="css/admin.css" rel="stylesheet">
 
-    <!-- Template Stylesheet -->
-
+    <style>
+        /* Hiệu ứng ẩn dần thông báo lỗi */
+        #errorMessage {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: red;
+            font-weight: bold;
+            text-align: center;
+            z-index: 1000; /* Đảm bảo lỗi nằm trên cùng */
+            display: none;
+            opacity: 1;
+            transition: opacity 0.5s ease-out;
+        }
+    </style>
+</head>
 
 <body>
-    
-    <div class="container" id="container">
-        <div class="form-container sign-up-container">
-            <form th:action="@{/admin}" method="post">
-                <h1>Create Account</h1>
-                <div class="social-container">
-                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-                </div>
-                <span>or use your email for registration</span>
-                <input type="text" placeholder="Name"  />
-                <input type="email" placeholder="Email" name="username" />
-                <input type="password" placeholder="Password" name="password" />
-                <button>Sign Up</button>
-            </form>
-        </div>
-        <div class="form-container sign-in-container">
-            <form th:action="@{/admin}" method="post">
-                <h1>Sign in</h1>
-                <div class="social-container">
-                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-                </div>
-                <span>or use your account</span>
-                <input type="text" placeholder="Username" name="username" />
-                <input type="password" placeholder="Password" name="password" />
-                <a href="#">Forgot your password?</a>
-                <button>Sign In</button>
-            </form>
-        </div>
-        <div class="overlay-container">
-            <div class="overlay">
-                <div class="overlay-panel overlay-left">
-                    <h2>Already have an account</h2>
-                    <button class="ghost" id="signIn">Sign In</button>
-                </div>
-                <div class="overlay-panel overlay-right">
-                    <h2>No account</h2>
-                    <button class="ghost" id="signUp">Sign Up</button>
-                </div>
+<div class="container" id="container">
+    <div class="form-container sign-up-container">
+        <form th:action="@{/admin}" method="post">
+            <h1>Create Account</h1>
+            <div class="social-container">
+                <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            <span>or use your email for registration</span>
+            <input type="text" placeholder="Name" />
+            <input type="email" placeholder="Email" name="username" />
+            <input type="password" placeholder="Password" name="password" />
+            <button>Sign Up</button>
+        </form>
+    </div>
+
+    <div class="form-container sign-in-container">
+        <form th:action="@{/admin}" method="post">
+            <h1>Sign in</h1>
+            <div class="social-container">
+                <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            <span>or use your account</span>
+
+
+            <input type="text" placeholder="Username" name="username" />
+            <input type="password" placeholder="Password" name="password" />
+            <a href="#">Forgot your password?</a>
+            <button type="submit" id="signInButton">Sign In</button>
+        </form>
+    </div>
+
+    <div class="overlay-container">
+        <div class="overlay">
+            <div class="overlay-panel overlay-left">
+                <h2>Already have an account</h2>
+                <button class="ghost" id="signIn">Sign In</button>
+            </div>
+            <div class="overlay-panel overlay-right">
+                <h2>No account</h2>
+                <button class="ghost" id="signUp">Sign Up</button>
             </div>
         </div>
     </div>
-    
-    <script>
-        const signUpButton = document.getElementById('signUp');
-        const signInButton = document.getElementById('signIn');
-        const container = document.getElementById('container');
+</div>
+<!-- Hiển thị lỗi -->
+<p id="errorMessage"
+   th:if="${param.error}">
+    Bạn nhập sai tên tài khoản hoặc mật khẩu, hoặc tài khoản chưa tồn tại.
+</p>
 
-        signUpButton.addEventListener('click', () => {
-            container.classList.add('right-panel-active');
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const signUpButton = document.getElementById("signUp");
+        const signInButton = document.getElementById("signIn");
+        const container = document.getElementById("container");
+        const errorMessage = document.getElementById("errorMessage");
+
+        // Chuyển đổi giao diện giữa Sign In và Sign Up
+        signUpButton.addEventListener("click", () => {
+            container.classList.add("right-panel-active");
         });
 
-        signInButton.addEventListener('click', () => {
-            container.classList.remove('right-panel-active');
+        signInButton.addEventListener("click", () => {
+            container.classList.remove("right-panel-active");
         });
-    </script>
+
+        // Xử lý hiệu ứng ẩn thông báo lỗi sau 3s
+        if (errorMessage && errorMessage.innerText.trim() !== "") {
+            errorMessage.style.display = "block"; // Hiện thông báo
+            setTimeout(() => {
+                errorMessage.style.opacity = "0"; // Mờ dần
+                setTimeout(() => {
+                    errorMessage.style.display = "none"; // Ẩn hẳn
+                }, 500);
+            }, 1500);
+        }
+    });
+</script>
 </body>
-
 </html>
+
+
