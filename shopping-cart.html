@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="master/head::head"></div>
+
+<body>
+<!-- Spinner Start -->
+<div th:replace="master/layout-spinner::spinner"></div>
+<!-- Spinner End -->
+
+<!-- Navbar Start -->
+<div th:replace="master/layout-navbar::navbar"></div>
+
+<!-- Navbar End -->
+<!-- header -->
+
+
+<!-- Carousel Start -->
+<div th:replace="master/layout-carousel::carousel"></div>
+
+    <section class="ftco-section ftco-cart">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="cart-list">
+                        <table class="table">
+                            <thead class="thead-primary">
+                                <tr class="text-center">
+                                    <th>&nbsp;</th>
+                                    <th>&nbsp;</th>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="text-center">
+                                    <td class="product-remove"><a href="#"><i class="fa fa-times"
+                                                aria-hidden="true"></i></a></td>
+
+                                    <td class="image-prod"><img src="img/td2.jpg" class="img"></img></td>
+
+                                    <td class="product-name">
+                                        <h3>Mi giả 4D</h3>
+                                    </td>
+
+                                    <td class="price">100.000 đ</td>
+
+                                    <td class="quantity">
+                                        <div class="input-group mb-3">
+                                            <button type="button" class="quantity-left-minus"><i class="fa fa-minus"
+                                                    aria-hidden="true"></i></button>
+                                            <input type="text" name="quantity"
+                                                class="quantity form-control input-number" value="1" min="1" max="100">
+                                            <button type="button" class="quantity-right-plus"><i class="fa fa-plus"
+                                                    aria-hidden="true"></i></button>
+                                        </div>
+                                    </td>
+
+                                    <td class="total">100.000 đ</td>
+                                </tr><!-- END TR-->
+
+                                <tr class="text-center">
+                                    <td class="product-remove"><a href="#"><i class="fa fa-times"
+                                                aria-hidden="true"></i></a></td>
+
+                                    <td class="image-prod"><img src="img/td3.jpg" class="img"></img></td>
+
+                                    <td class="product-name">
+                                        <h3>Phấn Má Single Blusher</h3>
+                                    </td>
+
+                                    <td class="price">150.000 đ</td>
+
+                                    <td class="quantity">
+                                        <div class="input-group mb-3">
+                                            <button type="button" class="quantity-left-minus"><i class="fa fa-minus"
+                                                    aria-hidden="true"></i></button>
+                                            <input type="text" name="quantity"
+                                                class="quantity form-control input-number" value="1" min="1" max="100">
+                                            <button type="button" class="quantity-right-plus"><i class="fa fa-plus"
+                                                    aria-hidden="true"></i></button>
+                                        </div>
+                                    </td>
+
+                                    <td class="total">150.000 đ</td>
+                                </tr><!-- END TR-->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col col-lg-5 col-md-6 mt-5 cart-wrap">
+                    <div class="cart-total mb-3">
+                        <h3>Cart Totals</h3>
+                        <p class="d-flex">
+                            <span>Subtotal</span>
+                            <span>250.000 đ</span>
+                        </p>
+                        <p class="d-flex">
+                            <span>Discount</span>
+                            <span>0</span>
+                        </p>
+                        <hr>
+                        <p class="d-flex total-price">
+                            <span>Total</span>
+                            <span>250.000 đ</span>
+                        </p>
+                    </div>
+                    <p class="text-center"><a href="pay" class="btn btn-pink border-radius py-3 px-4">Proceed to
+                            Checkout</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+<!-- Footer start -->
+<div th:replace="master/layout-footer::footer"></div>
+ <!-- Footer End -->
+
+ <!-- Back to Top -->
+ <a
+   href="#"
+   class="btn btn-lg btn-pink btn-lg-square rounded-circle back-to-top"
+   ><i class="bi bi-arrow-up"></i
+ ></a>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>
