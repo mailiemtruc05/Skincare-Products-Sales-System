@@ -25,14 +25,6 @@ public class Account {
     @Column(name = "phone", length = 15)
     private String phone;
 
-    @ColumnDefault("0")
-    @Column(name = "isSeller")
-    private Boolean isSeller;
-
-    @ColumnDefault("0")
-    @Column(name = "isAdmin")
-    private Boolean isAdmin;
-
     @ColumnDefault("getdate()")
     @Column(name = "createdAt")
     private Instant createdAt;
@@ -77,21 +69,6 @@ public class Account {
         this.phone = phone;
     }
 
-    public Boolean getIsSeller() {
-        return isSeller;
-    }
-
-    public void setIsSeller(Boolean isSeller) {
-        this.isSeller = isSeller;
-    }
-
-    public Boolean getIsAdmin() {
-        return isAdmin;
-    }
-
-    public void setIsAdmin(Boolean isAdmin) {
-        this.isAdmin = isAdmin;
-    }
 
     public Instant getCreatedAt() {
         return createdAt;
@@ -101,21 +78,19 @@ public class Account {
         this.createdAt = createdAt;
     }
 
-        @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
-        private Set<AccountRole> accountRoles;
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
+    private Set<AccountRole> accountRoles;
 
-        public Account() {}
+    public Account() {}
 
-        public Account(Integer id, String username, String password, String email, String phone, Boolean isSeller, Boolean isAdmin, Instant createdAt) {
-            this.id = id;
-            this.username = username;
-            this.password = password;
-            this.email = email;
-            this.phone = phone;
-            this.isSeller = isSeller;
-            this.isAdmin = isAdmin;
-            this.createdAt = createdAt;
-        }
-        public Set<AccountRole> getAccountRoles() { return accountRoles; }
-        public void setAccountRoles(Set<AccountRole> accountRoles) { this.accountRoles = accountRoles; }
+    public Account(Integer id, String username, String password, String email, String phone, Boolean isSeller, Boolean isAdmin, Instant createdAt) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+        this.createdAt = createdAt;
     }
+    public Set<AccountRole> getAccountRoles() { return accountRoles; }
+    public void setAccountRoles(Set<AccountRole> accountRoles) { this.accountRoles = accountRoles; }
+}
