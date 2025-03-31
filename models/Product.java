@@ -32,7 +32,7 @@ public class Product {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "cid", nullable = false)
+    @JoinColumn(name = "cid", nullable = false) // Liên kết với Category
     private Category cid;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -104,4 +104,19 @@ public class Product {
         this.updatedAt = updatedAt;
     }
 
+    public Product(Integer id, String productName, String image, BigDecimal price, String description, Category cid, SubCategory subCategory, Instant createdAt, Instant updatedAt) {
+        this.id = id;
+        this.productName = productName;
+        this.image = image;
+        this.price = price;
+        this.description = description;
+        this.cid = cid;
+        this.subCategory = subCategory;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    // Constructor không tham số (cần thiết để JPA hoạt động)
+    public Product() {
+    }
 }
