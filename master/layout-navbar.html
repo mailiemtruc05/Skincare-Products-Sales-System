@@ -79,40 +79,29 @@
                             <a href="/">Home</a>
                         </li>
                         <li class="drop-menu">
-                            <a href="/product">Products<span>&#11167</span></a>
+                            <a href="/product">Products <span>&#11167</span></a>
                             <div class="sub-menu">
                                 <ul>
                                     <li>
-                                        <img class="logo-submenu" th:src="@{img/logo-submenu.jpg}" alt="Image" />
+                                        <img class="logo-submenu" th:src="@{/img/logo-submenu.jpg}" alt="Image" />
                                     </li>
                                 </ul>
-                                <ul>
-                                    <li><h4 class="submenu-h4" >Trang điểm</h4></li>
-                                    <li><a href="#">Kem nền</a> </li>
-                                    <li><a href="#">Phấn phủ</a> </li>
-                                    <li><a href="#">Phấn mắt</a> </li>
-                                    <li><a href="#">Eyeliner</a> </li>
-                                    <li><a href="#">Son môi</a> </li>
+                                <ul th:each="category : ${categories}">
+                                    <li>
+                                        <h4 class="submenu-h4" th:text="${category.cname}"></h4>
+                                        <ul>
+                                            <li th:each="sub : ${category.subCategories}">
+                                                <a th:href="@{'/product?sub=' + ${sub.id}}" th:text="${sub.subname}"></a>
+                                            </li>
+                                        </ul>
+                                    </li>
                                 </ul>
-                                <ul>
-                                    <li><h4 class="submenu-h4">Dưỡng da</h4></li>
-                                    <li><a href="#">Mặt nạ</a> </li>
-                                    <li><a href="#">Serum</a> </li>
-                                    <li><a href="#">Phấn mắt</a> </li>
-                                    <li><a href="#">Eyeliner</a> </li>
-                                    <li><a href="#">Tẩy trang</a> </li>
-                                </ul>
-                                <ul>
-                                    <li><h4 class="submenu-h4">Sản phẩm khác</h4></li>
-                                    <li><a href="#">Kem nền</a> </li>
-                                    <li><a href="#">Phấn phủ</a> </li>
-                                    <li><a href="#">Phấn mắt</a> </li>
-                                    <li><a href="#">Eyeliner</a> </li>
-                                    <li><a href="#">Son môi</a> </li>
-                                </ul>
-
                             </div>
                         </li>
+
+
+
+
                         <li class="drop-two">
                             <a href="#">About us <span>&#11167</span></a>
                             <div class="menu-two">

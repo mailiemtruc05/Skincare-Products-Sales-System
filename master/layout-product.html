@@ -9,196 +9,42 @@
             </div>
             <div class="col-lg-6 text-start text-lg-end wow " data-wow-delay="0.1s">
                 <ul class="nav nav-pills d-inline-flex justify-content-end mb-5">
-
-                    <li class="nav-item me-2">
-                        <a class="btn btn-outline-primary border-2 active" data-bs-toggle="pill" href="#tab-1">Trang Điểm</a>
+                    <li th:each="category : ${categories}" class="nav-item me-2">
+                        <a class="btn btn-outline-primary border-2" data-bs-toggle="pill"
+                           th:href="'#tab-' + ${category.id}"
+                           th:text="${category.cname}">Tên danh mục</a>
                     </li>
-                    <li class="nav-item me-2">
-                        <a class="btn btn-outline-primary border-2" data-bs-toggle="pill" href="#tab-2">Dưỡng da</a>
-                    </li>
-                    <li class="nav-item me-2">
-                        <a class="btn btn-outline-primary border-2" data-bs-toggle="pill" href="#tab-3">Sản phẩm khác</a>
-                    </li>
-
                 </ul>
             </div>
         </div>
         <div class="tab-content">
             <div id="tab-1" class="tab-pane fade show p-0 active">
                 <div class="row g-4">
-                    <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div th:each="p : ${LISTPRODUCT}" class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                         <div class="product-item">
                             <div class="position-relative bg-light overflow-hidden">
-                                <img class="img-fluid w-100" th:src="@{img/td2.jpg}" alt="">
+                                <img class="img-fluid w-100" th:src="@{${p.image}}" alt="">
                                 <div class="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
                             </div>
                             <div class="text-center p-4">
-                                <a class="d-block h5 mb-2" href="/home/product-details">Mi giả 4D</a>
-                                <span class="text-primary me-1">100.000 ₫</span>
-                                <span class="text-body text-decoration-line-through">150.000 ₫</span>
+                                <a class="d-block h5 mb-2" href="" th:text="${p.productName}"></a>
+                                <span class="text-primary me-1" th:text="${p.price} + ' ₫'"></span>
                             </div>
                             <div class="d-flex border-top">
                                 <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" href="/product-details"><i class="fa fa-eye text-primary me-2"></i>View detail</a>
+                                    <a class="text-body" th:href="@{/product-details}"><i class="fa fa-eye text-primary me-2"></i>View detail</a>
                                 </small>
                                 <small class="w-50 text-center py-2">
-                                    <a class="text-body" href="/shopping-cart"><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
+                                    <a class="text-body" th:href="@{/shopping-cart/add/{id}(id=${p.id})}"><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
                                 </small>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                        <div class="product-item">
-                            <div class="position-relative bg-light overflow-hidden">
-                                <img class="img-fluid w-100" th:src="@{img/td3.jpg}" alt="">
-                                <div class="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
-                            </div>
-                            <div class="text-center p-4">
-                                <a class="d-block h5 mb-2" href="/product-details">Phấn Má Single Blusher</a>
-                                <span class="text-primary me-1">150.000 ₫</span>
-                                <span class="text-body text-decoration-line-through">325.000 ₫</span>
-                            </div>
-                            <div class="d-flex border-top">
-                                <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" href="/product-details"><i class="fa fa-eye text-primary me-2"></i>View detail</a>
-                                </small>
-                                <small class="w-50 text-center py-2">
-                                    <a class="text-body" href="/shopping-cart"><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                        <div class="product-item">
-                            <div class="position-relative bg-light overflow-hidden">
-                                <img class="img-fluid w-100" th:src="@{img/td2.png}" alt="">
-                                <div class="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
-                            </div>
-                            <div class="text-center p-4">
-                                <a class="d-block h5 mb-2" href="">Phấn nước AprilSkin</a>
-                                <span class="text-primary me-1">125.000 ₫</span>
-                                <span class="text-body text-decoration-line-through">200.000 ₫</span>
-                            </div>
-                            <div class="d-flex border-top">
-                                <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
-                                </small>
-                                <small class="w-50 text-center py-2">
-                                    <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.7s">
-                        <div class="product-item">
-                            <div class="position-relative bg-light overflow-hidden">
-                                <img class="img-fluid w-100" th:src="@{img/td6.jpg}" alt="">
-                                <div class="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
-                            </div>
-                            <div class="text-center p-4">
-                                <a class="d-block h5 mb-2" href="">Che khuyết điểm </a>
-                                <span class="text-primary me-1">99.000 ₫</span>
-                                <span class="text-body text-decoration-line-through">150.000 ₫</span>
-                            </div>
-                            <div class="d-flex border-top">
-                                <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
-                                </small>
-                                <small class="w-50 text-center py-2">
-                                    <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                        <div class="product-item">
-                            <div class="position-relative bg-light overflow-hidden">
-                                <img class="img-fluid w-100" th:src="@{img/td4.png}" alt="">
-                                <div class="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
-                            </div>
-                            <div class="text-center p-4">
-                                <a class="d-block h5 mb-2" href="">Phấn phủ</a>
-                                <span class="text-primary me-1">125.000 ₫</span>
-                                <span class="text-body text-decoration-line-through">250.000 ₫</span>
-                            </div>
-                            <div class="d-flex border-top">
-                                <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
-                                </small>
-                                <small class="w-50 text-center py-2">
-                                    <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                        <div class="product-item">
-                            <div class="position-relative bg-light overflow-hidden">
-                                <img class="img-fluid w-100" th:src="@{/img/td5.jpg}" alt="">
-                                <div class="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
-                            </div>
-                            <div class="text-center p-4">
-                                <a class="d-block h5 mb-2" href="">Cọ tiện lợi</a>
-                                <span class="text-primary me-1">65.000 ₫</span>
-                                <span class="text-body text-decoration-line-through">120.000 ₫</span>
-                            </div>
-                            <div class="d-flex border-top">
-                                <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
-                                </small>
-                                <small class="w-50 text-center py-2">
-                                    <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                        <div class="product-item">
-                            <div class="position-relative bg-light overflow-hidden">
-                                <img class="img-fluid w-100" th:src="@{img/td8.jpg}" alt="">
-                                <div class="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
-                            </div>
-                            <div class="text-center p-4">
-                                <a class="d-block h5 mb-2" href="">Kẹp mi</a>
-                                <span class="text-primary me-1">75.000 ₫</span>
-                                <span class="text-body text-decoration-line-through">130.000 ₫</span>
-                            </div>
-                            <div class="d-flex border-top">
-                                <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
-                                </small>
-                                <small class="w-50 text-center py-2">
-                                    <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.7s">
-                        <div class="product-item">
-                            <div class="position-relative bg-light overflow-hidden">
-                                <img class="img-fluid w-100" th:src="@{img/td5.png}" alt="">
-                                <div class="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
-                            </div>
-                            <div class="text-center p-4">
-                                <a class="d-block h5 mb-2" href="">Bút chì kẻ mày</a>
-                                <span class="text-primary me-1">59.000 ₫</span>
-                                <span class="text-body text-decoration-line-through">70.000 ₫</span>
-                            </div>
-                            <div class="d-flex border-top">
-                                <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
-                                </small>
-                                <small class="w-50 text-center py-2">
-                                    <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.1s">
-                        <!-- <a class="btn btn-primary rounded-pill py-3 px-5" href=""></a>---->
                     </div>
                 </div>
             </div>
+
+
+            <!--//////////////////////////////////////////////////////////////////////////////////////////-->
             <div id="tab-2" class="tab-pane fade show p-0">
                 <div class="row g-4">
                     <div class="col-xl-3 col-lg-4 col-md-6">
@@ -375,6 +221,9 @@
                     </div>
                 </div>
             </div>
+
+
+            <!--//////////////////////////////////////////////////////////////////////////////////////////-->
             <div id="tab-3" class="tab-pane fade show p-0">
                 <div class="row g-4">
                     <div class="col-xl-3 col-lg-4 col-md-6">
