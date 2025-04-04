@@ -2,7 +2,6 @@ package edu.uth.wed_san_pham_cham_soc_da.models;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
-
 import java.time.Instant;
 import java.util.Set;
 
@@ -25,9 +24,26 @@ public class Account {
     @Column(name = "phone", length = 15)
     private String phone;
 
-    @ColumnDefault("getdate()")
-    @Column(name = "createdAt")
+    @Column(name = "createdAt", nullable = false, updatable = false)
     private Instant createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = Instant.now();
+    }
+
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
+    private Set<AccountRole> accountRoles;
+
+    public Account() {}
+
+    public Account(String username, String password, String email, String phone) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+        this.createdAt = Instant.now();
+    }
 
     public Integer getId() {
         return id;
@@ -69,28 +85,15 @@ public class Account {
         this.phone = phone;
     }
 
-
     public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
+    public Set<AccountRole> getAccountRoles() {
+        return accountRoles;
     }
 
-    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
-    private Set<AccountRole> accountRoles;
-
-    public Account() {}
-
-    public Account(Integer id, String username, String password, String email, String phone, Boolean isSeller, Boolean isAdmin, Instant createdAt) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.phone = phone;
-        this.createdAt = createdAt;
+    public void setAccountRoles(Set<AccountRole> accountRoles) {
+        this.accountRoles = accountRoles;
     }
-    public Set<AccountRole> getAccountRoles() { return accountRoles; }
-    public void setAccountRoles(Set<AccountRole> accountRoles) { this.accountRoles = accountRoles; }
 }
