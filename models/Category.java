@@ -2,7 +2,6 @@ package edu.uth.wed_san_pham_cham_soc_da.models;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.Nationalized;
-
 import java.util.List;
 
 @Entity
@@ -16,6 +15,18 @@ public class Category {
     @Column(name = "cname", nullable = false, length = 50)
     private String cname;
 
+    @OneToMany(mappedBy = "cid", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<SubCategory> subCategories;
+
+    // Constructor mặc định
+    public Category() {}
+
+    // Constructor có tham số
+    public Category(String cname) {
+        this.cname = cname;
+    }
+
+    // Getters và Setters
     public Integer getId() {
         return id;
     }
@@ -32,9 +43,6 @@ public class Category {
         this.cname = cname;
     }
 
-    @OneToMany(mappedBy = "cid", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<SubCategory> subCategories;
-
     public List<SubCategory> getSubCategories() {
         return subCategories;
     }
@@ -42,5 +50,4 @@ public class Category {
     public void setSubCategories(List<SubCategory> subCategories) {
         this.subCategories = subCategories;
     }
-
 }
