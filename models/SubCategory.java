@@ -18,6 +18,15 @@ public class SubCategory {
     @JoinColumn(name = "cid", nullable = false)
     private Category cid;
 
+    // Constructor mặc định
+    public SubCategory() {}
+
+    // Constructor có tham số
+    public SubCategory(String subname, Category category) {
+        this.subname = subname;
+        this.cid = category;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -32,6 +41,14 @@ public class SubCategory {
 
     public void setSubname(String subname) {
         this.subname = subname;
+    }
+
+    public Category getCategory() {
+        return cid;
+    }
+
+    public void setCategory(Category category) {
+        this.cid = category;
     }
 
 }
