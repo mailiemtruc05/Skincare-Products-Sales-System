@@ -10,40 +10,28 @@ public class Roles {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "uID", nullable = false)
     private Integer id;
+
     @Column(name = "name", nullable = false)
     private String name;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<AccountRole> accountRoles;
 
-    public void setName(String name) {
+    // Constructors
+    public Roles() {}
+
+    public Roles(String name) {
         this.name = name;
     }
 
-    public Integer getId() {
-        return id;
-    }
+    // Getters & Setters
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
 
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public Roles() {
+    public Set<AccountRole> getAccountRoles() { return accountRoles; }
+    public void setAccountRoles(Set<AccountRole> accountRoles) { this.accountRoles = accountRoles; }
 
-    }
-
-    public Roles(Integer id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public Roles(Integer id, String name, Set<AccountRole> rolesaccount) {
-        this.id = id;
-        this.name = name;
-        Rolesaccount = rolesaccount;
-    }
-
-    @OneToMany(mappedBy = "role")
-    private Set<AccountRole> Rolesaccount;
 }
