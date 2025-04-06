@@ -9,19 +9,18 @@ public class AccountRole
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "uID", nullable = false)
     private Integer id;
+
     @ManyToOne
     @JoinColumn(name ="accountId",referencedColumnName = "uID")
     private Account account;
+
     @ManyToOne
     @JoinColumn(name = "roleId",referencedColumnName = "uID")
     private Roles role;
 
-    public AccountRole() {
+    public AccountRole() {}
 
-    }
-
-    public AccountRole(Integer id, Account account, Roles role) {
-        this.id = id;
+    public AccountRole(Account account, Roles role) {
         this.account = account;
         this.role = role;
     }
