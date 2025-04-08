@@ -1,5 +1,6 @@
 package edu.uth.wed_san_pham_cham_soc_da.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Nationalized;
 
@@ -11,7 +12,8 @@ public class Contact {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "UserID", nullable = false)
+    @JoinColumn(name = "UserID", referencedColumnName = "uID", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private edu.uth.wed_san_pham_cham_soc_da.models.Account userID;
 
     @Column(name = "Email", nullable = false, length = 30)
