@@ -24,99 +24,46 @@
     <!-- Product End -->
 
     <!-- Testimonial Start -->
-    <div class="container-fluid bg-light py-6">
+    <div class="container-fluid bg-light py-6" th:if="${isSearch == false}">
         <div class="container">
-            <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+            <div class="section-header text-center mx-auto mb-5 wow fadeInUp"
+                 data-wow-delay="0.1s" style="max-width: 500px;">
                 <h1 class="display-5 mb-3">Sản phẩm liên quan</h1>
-
             </div>
             <div class="owl-carousel testimonial-carousel wow fadeInUp" data-wow-delay="0.1s">
-                <div class=" position-relative bg-white p-5 mt-4">
+                <!-- Lặp qua danh sách relatedProducts đã xáo trộn -->
+                <div th:each="product : ${relatedProducts}" class="position-relative bg-white p-5 mt-4">
                     <i class="fa fa-quote-left fa-3x text-primary position-absolute top-0 start-0 mt-n4 ms-5"></i>
-                    <img class="" th:src="@{img/k3.jpg}" alt="">
+                    <img th:src="${#strings.startsWith(product.image, 'http') ? product.image : '/img/' + product.image}"
+                         alt="Sản phẩm liên quan"
+                         onerror="this.onerror=null; this.src='/img/default.jpg';">
                     <div class="text-center p-4">
-                        <a class="d-block h5 mb-2" href="">Dầu dưỡng tóc</a>
-                        <span class="text-primary me-1">99.000 ₫</span>
-                        <span class="text-body text-decoration-line-through">112.000 ₫</span>
+                        <a class="d-block h5 mb-2 text-limit" th:href="@{'/product-details/' + ${product.id}}"
+                           th:text="${product.productName}">Tên sản phẩm</a>
+                        <span class="text-primary me-1"
+                              th:text="${#numbers.formatInteger(product.price, 0, 'COMMA')} + ' VNĐ'">99.000 ₫</span>
                     </div>
                     <div class="d-flex border-top">
                         <small class="w-50 text-center border-end py-2">
-                            <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
+                            <a class="text-body" th:href="@{'/product-details/' + ${product.id}}">
+                                <i class="fa fa-eye text-primary me-2"></i>View detail
+                            </a>
                         </small>
                         <small class="w-50 text-center py-2">
-                            <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                        </small>
-                    </div>
-                </div>
-                <div class=" position-relative bg-white p-5 mt-4">
-                    <i class="fa fa-quote-left fa-3x text-primary position-absolute top-0 start-0 mt-n4 ms-5"></i>
-                    <img class="" th:src="@{img/k3.jpg}" alt="">
-                    <div class="text-center p-4">
-                        <a class="d-block h5 mb-2" href="">Dầu dưỡng tóc</a>
-                        <span class="text-primary me-1">99.000 ₫</span>
-                        <span class="text-body text-decoration-line-through">112.000 ₫</span>
-                    </div>
-                    <div class="d-flex border-top">
-                        <small class="w-50 text-center border-end py-2">
-                            <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
-                        </small>
-                        <small class="w-50 text-center py-2">
-                            <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                        </small>
-                    </div>
-                </div>
-                <div class=" position-relative bg-white p-5 mt-4">
-                    <i class="fa fa-quote-left fa-3x text-primary position-absolute top-0 start-0 mt-n4 ms-5"></i>
-                    <img class="" th:src="@{img/k3.jpg}" alt="">
-                    <div class="text-center p-4">
-                        <a class="d-block h5 mb-2" href="">Dầu dưỡng tóc</a>
-                        <span class="text-primary me-1">99.000 ₫</span>
-                        <span class="text-body text-decoration-line-through">112.000 ₫</span>
-                    </div>
-                    <div class="d-flex border-top">
-                        <small class="w-50 text-center border-end py-2">
-                            <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
-                        </small>
-                        <small class="w-50 text-center py-2">
-                            <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                        </small>
-                    </div>
-                </div><div class=" position-relative bg-white p-5 mt-4">
-                    <i class="fa fa-quote-left fa-3x text-primary position-absolute top-0 start-0 mt-n4 ms-5"></i>
-                    <img class="" th:src="@{img/k3.jpg}" alt="">
-                    <div class="text-center p-4">
-                        <a class="d-block h5 mb-2" href="">Dầu dưỡng tóc</a>
-                        <span class="text-primary me-1">99.000 ₫</span>
-                        <span class="text-body text-decoration-line-through">112.000 ₫</span>
-                    </div>
-                    <div class="d-flex border-top">
-                        <small class="w-50 text-center border-end py-2">
-                            <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
-                        </small>
-                        <small class="w-50 text-center py-2">
-                            <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                        </small>
-                    </div>
-                </div><div class=" position-relative bg-white p-5 mt-4">
-                    <i class="fa fa-quote-left fa-3x text-primary position-absolute top-0 start-0 mt-n4 ms-5"></i>
-                    <img class="" th:src="@{img/k3.jpg}" alt="">
-                    <div class="text-center p-4">
-                        <a class="d-block h5 mb-2" href="">Dầu dưỡng tóc</a>
-                        <span class="text-primary me-1">99.000 ₫</span>
-                        <span class="text-body text-decoration-line-through">112.000 ₫</span>
-                    </div>
-                    <div class="d-flex border-top">
-                        <small class="w-50 text-center border-end py-2">
-                            <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
-                        </small>
-                        <small class="w-50 text-center py-2">
-                            <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
+                            <a href="#"
+                               class="btn-add-to-cart text-body"
+                               th:attr="data-id=${product.id}">
+                                <i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart
+                            </a>
                         </small>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+<!--     End "Sản phẩm liên quan" -->
+
+
     <!-- Testimonial End -->
 
 
@@ -138,6 +85,32 @@
     <script th:src="@{/lib/easing/easing.min.js}"></script>
     <script th:src="@{/lib/waypoints/waypoints.min.js}"></script>
     <script th:src="@{/lib/owlcarousel/owl.carousel.min.js}"></script>
+    <script>
+        $(document).ready(function() {
+            // Hàm format VNĐ cho đẹp (tuỳ ý)
+            function formatVND(x) {
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " đ";
+            }
+
+            // Bắt sự kiện click cho nút "Add to cart"
+            $(".btn-add-to-cart").click(function(e) {
+                e.preventDefault(); // chặn load trang
+                const productId = $(this).data("id");
+
+                $.getJSON(`/shopping-cart/addAjax/${productId}`, function(resp) {
+                    if (resp.success) {
+                        // Thông báo
+                        alert(resp.message);
+                        // Cập nhật total giỏ hàng nếu cần
+                        // Ví dụ bạn có ô hiển thị tổng:
+                        // $("#cartTotal").text(formatVND(resp.cartTotal));
+                    } else {
+                        alert(resp.message);
+                    }
+                });
+            });
+        });
+    </script>
 
 
     <!-- Template Javascript -->
