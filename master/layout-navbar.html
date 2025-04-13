@@ -39,7 +39,7 @@
         <a href="/" class="navbar-brand ms-4 ms-lg-0">
             <h1 class="fw-bold text-primary m-0">
             <span class="text-secondary">
-            <img class="logo" th:src="@{img/logo.png}" alt="Image" />
+            <img class="logo" th:src="@{/img/logo.png}" alt="Image" />
 
             </span>
             </h1>
@@ -88,7 +88,11 @@
                                 </ul>
                                 <ul th:each="category : ${categories}">
                                     <li>
-                                        <h4 class="submenu-h4" th:text="${category.cname}"></h4>
+                                        <h4>
+                                            <a class="submenu-h4" th:href="@{'/product?cat=' + ${category.id}}" th:text="${category.cname}"></a>
+                                        </h4>
+
+
                                         <ul>
                                             <li th:each="sub : ${category.subCategories}">
                                                 <a th:href="@{'/product?sub=' + ${sub.id}}" th:text="${sub.subname}"></a>
@@ -98,10 +102,6 @@
                                 </ul>
                             </div>
                         </li>
-
-
-
-
                         <li class="drop-two">
                             <a href="#">About us <span>&#11167</span></a>
                             <div class="menu-two">
@@ -116,13 +116,15 @@
                 </div>
             </div>
             <div class="d-none d-lg-flex ms-2">
-                <form action="" id="search-box">
-                    <input type="text" id="search-text" placeholder="Bạn muốn tìm gì?" required>
-                    <button id="search-btn"><small class="fa fa-search text-body"></small></button>
+                <form action="/search" method="get" id="search-box">
+                    <input type="text" name="query" id="search-text" placeholder="Bạn muốn tìm gì?" required>
+                    <button id="search-btn">
+                        <small class="fa fa-search text-body"></small>
+                    </button>
                 </form>
 
                 </a>
-                <a class="btn-sm-square bg-white rounded-circle ms-3" href="/home/admin2">
+                <a class="btn-sm-square bg-white rounded-circle ms-3" href="/admin2">
                     <small class="fa fa-user text-body"></small>
                 </a>
                 <a class="btn-sm-square bg-white rounded-circle ms-3" href="/shopping-cart">
