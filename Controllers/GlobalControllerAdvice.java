@@ -22,3 +22,5 @@ public class GlobalControllerAdvice {
         model.addAttribute("categories", categories);
     }
 }
+
+
