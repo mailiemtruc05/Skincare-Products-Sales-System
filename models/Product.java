@@ -1,5 +1,6 @@
 package edu.uth.wed_san_pham_cham_soc_da.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
@@ -33,10 +34,12 @@ public class Product {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "cid", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Category cid;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "sub_category_id", nullable = false) // Liên kết với SubCategory
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private SubCategory subCategory;
 
 
