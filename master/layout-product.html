@@ -1,404 +1,176 @@
-<div  th:fragment="product" class=" layout-product container-xxl py-5">
+
+<div th:fragment="product" class="layout-product container-xxl py-5">
     <div class="container">
+        <!-- Tiêu đề trang Sản Phẩm -->
         <div class="row g-0 gx-5 align-items-end">
             <div class="col-lg-6">
                 <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
                     <h1 class="display-5 mb-3">Sản Phẩm</h1>
-
                 </div>
             </div>
-            <div class="col-lg-6 text-start text-lg-end wow " data-wow-delay="0.1s">
-                <ul class="nav nav-pills d-inline-flex justify-content-end mb-5">
-                    <li th:each="category : ${categories}" class="nav-item me-2">
-                        <a class="btn btn-outline-primary border-2" data-bs-toggle="pill"
-                           th:href="'#tab-' + ${category.id}"
-                           th:text="${category.cname}">Tên danh mục</a>
+            <div class="col-lg-6 text-start text-lg-end wow" data-wow-delay="0.1s">
+                <!--
+                    Chỉ hiển thị các tab danh mục khi KHÔNG tìm kiếm (isSearch == false).
+                    Giữ nguyên logic gốc:
+                    (A) Nếu KHÔNG lọc => hiển thị tất cả tab
+                    (B) Nếu ĐANG lọc => hiển thị 1 tab
+                -->
+                <ul class="nav nav-pills d-inline-flex justify-content-center mb-5" th:if="${isSearch == false}">
+                    <!-- (A) Nếu KHÔNG lọc => hiển thị tất cả tab -->
+                    <li th:if="${selectedCatId == null and selectedSubId == null}"
+                        th:each="category, stat : ${categories}"
+                        class="nav-item me-2">
+                        <a class="btn btn-outline-primary border-2"
+                           data-bs-toggle="pill"
+                           th:href="${'#tab-' + category.id}"
+                           th:classappend="${stat.index == 0} ? ' active' : ''"
+                           th:text="${category.cname}">
+                        </a>
+                    </li>
+                    <!-- (B) Nếu ĐANG lọc => chỉ hiển thị 1 tab (activeCategory) -->
+                    <li th:if="${selectedCatId != null or selectedSubId != null}"
+                        class="nav-item me-2">
+                        <a class="btn btn-outline-primary border-2 active"
+                           data-bs-toggle="pill"
+                           th:href="${'#tab-' + (activeCategory != null ? activeCategory.id : 0)}"
+                           th:text="${activeCategory != null ? activeCategory.cname : 'Danh mục'}">
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
-        <div class="tab-content">
-            <div id="tab-1" class="tab-pane fade show p-0 active">
-                <div class="row g-4">
-                    <div th:each="p : ${LISTPRODUCT}" class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                        <div class="product-item">
-                            <div class="position-relative bg-light overflow-hidden">
-                                <img class="img-fluid w-100" th:src="@{${p.image}}" alt="">
-                                <div class="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
-                            </div>
-                            <div class="text-center p-4">
-                                <a class="d-block h5 mb-2" href="" th:text="${p.productName}"></a>
-                                <span class="text-primary me-1" th:text="${p.price} + ' ₫'"></span>
-                            </div>
-                            <div class="d-flex border-top">
-                                <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" th:href="@{/product-details}"><i class="fa fa-eye text-primary me-2"></i>View detail</a>
-                                </small>
-                                <small class="w-50 text-center py-2">
-                                    <a class="text-body" th:href="@{/shopping-cart/add/{id}(id=${p.id})}"><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                                </small>
-                            </div>
-                        </div>
-                    </div>
+        <!--
+            PHẦN 1: Khi đang tìm kiếm (isSearch == true), hiển thị kết quả tìm kiếm
+        -->
+        <div th:if="${isSearch}">
+            <div class="row g-4">
+                <!-- Nếu không có kết quả -->
+                <div th:if="${#lists.isEmpty(searchResults)}">
+                    <p>Không tìm thấy sản phẩm.</p>
                 </div>
-            </div>
-
-
-            <!--//////////////////////////////////////////////////////////////////////////////////////////-->
-            <div id="tab-2" class="tab-pane fade show p-0">
-                <div class="row g-4">
-                    <div class="col-xl-3 col-lg-4 col-md-6">
-                        <div class="product-item">
-                            <div class="position-relative bg-light overflow-hidden">
-                                <img class="img-fluid w-100" th:src="@{img/dd1.png}" alt="">
-                                <div class="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
-                            </div>
-                            <div class="text-center p-4">
-                                <a class="d-block h5 mb-2" href="">Toner Coccon</a>
-                                <span class="text-primary me-1">170.000 ₫</span>
-                                <span class="text-body text-decoration-line-through">250.000 ₫</span>
-                            </div>
-                            <div class="d-flex border-top">
-                                <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
-                                </small>
-                                <small class="w-50 text-center py-2">
-                                    <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                                </small>
-                            </div>
+                <!-- Nếu có kết quả -->
+                <div th:each="product : ${searchResults}" class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="product-item">
+                        <div class="position-relative bg-light overflow-hidden">
+                            <img class="img-fluid w-100" th:src="${product.image}" alt="">
                         </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6">
-                        <div class="product-item">
-                            <div class="position-relative bg-light overflow-hidden">
-                                <img class="img-fluid w-100" th:src="@{img/dd10.png}" alt="">
-                                <div class="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
-                            </div>
-                            <div class="text-center p-4">
-                                <a class="d-block h5 mb-2" href="">Bột rửa mặt của Nhật</a>
-                                <span class="text-primary me-1">100.000 ₫</span>
-                                <span class="text-body text-decoration-line-through">175.000 ₫</span>
-                            </div>
-                            <div class="d-flex border-top">
-                                <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
-                                </small>
-                                <small class="w-50 text-center py-2">
-                                    <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                                </small>
-                            </div>
+                        <div class="text-center p-4">
+                            <a class="d-block h5 mb-2 text-limit"
+                               th:href="@{'/product-details/' + ${product.id}}"
+                               th:text="${product.productName}">Tên sản phẩm</a>
+                            <span class="text-primary me-1"
+                                  th:text="${#numbers.formatDecimal(product.price, 1, 'POINT', 0, 'COMMA')} + ' VNĐ'">
+                                    Giá
+                                </span>
                         </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6">
-                        <div class="product-item">
-                            <div class="position-relative bg-light overflow-hidden">
-                                <img class="img-fluid w-100" th:src="@{img/dd2.png}" alt="">
-                                <div class="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
-                            </div>
-                            <div class="text-center p-4">
-                                <a class="d-block h5 mb-2" href="">Retinol Paula's Choice</a>
-                                <span class="text-primary me-1">220.000 ₫ v</span>
-                                <span class="text-body text-decoration-line-through">325.000 ₫</span>
-                            </div>
-                            <div class="d-flex border-top">
-                                <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
-                                </small>
-                                <small class="w-50 text-center py-2">
-                                    <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                                </small>
-                            </div>
+                        <div class="d-flex border-top">
+                            <small class="w-50 text-center border-end py-2">
+                                <a class="text-body" th:href="@{'/product-details/' + ${product.id}}">
+                                    <i class="fa fa-eye text-primary me-2"></i>View detail
+                                </a>
+                            </small>
+                            <small class="w-50 text-center py-2">
+                                <a href="#"
+                                   class="btn-add-to-cart text-body"
+                                   th:attr="data-id=${product.id}">
+                                    <i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart
+                                </a>
+                            </small>
                         </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6">
-                        <div class="product-item">
-                            <div class="position-relative bg-light overflow-hidden">
-                                <img class="img-fluid w-100" th:src="@{img/dd3.png}" alt="">
-                                <div class="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
-                            </div>
-                            <div class="text-center p-4">
-                                <a class="d-block h5 mb-2" href="">DHC</a>
-                                <span class="text-primary me-1">120.000 ₫</span>
-                                <span class="text-body text-decoration-line-through">200.000 ₫</span>
-                            </div>
-                            <div class="d-flex border-top">
-                                <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
-                                </small>
-                                <small class="w-50 text-center py-2">
-                                    <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6">
-                        <div class="product-item">
-                            <div class="position-relative bg-light overflow-hidden">
-                                <img class="img-fluid w-100" th:src="@{img/dd4.jpg}" alt="">
-                                <div class="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
-                            </div>
-                            <div class="text-center p-4">
-                                <a class="d-block h5 mb-2" href="">Mặt nạ thanh lăn</a>
-                                <span class="text-primary me-1">99.000 ₫</span>
-                                <span class="text-body text-decoration-line-through">120.000 ₫</span>
-                            </div>
-                            <div class="d-flex border-top">
-                                <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
-                                </small>
-                                <small class="w-50 text-center py-2">
-                                    <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6">
-                        <div class="product-item">
-                            <div class="position-relative bg-light overflow-hidden">
-                                <img class="img-fluid w-100" th:src="@{img/dd5.jpg}" alt="">
-                                <div class="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
-                            </div>
-                            <div class="text-center p-4">
-                                <a class="d-block h5 mb-2" href="">Mặt nạ đất sét</a>
-                                <span class="text-primary me-1">160.000 ₫</span>
-                                <span class="text-body text-decoration-line-through">200.000 ₫</span>
-                            </div>
-                            <div class="d-flex border-top">
-                                <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
-                                </small>
-                                <small class="w-50 text-center py-2">
-                                    <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6">
-                        <div class="product-item">
-                            <div class="position-relative bg-light overflow-hidden">
-                                <img class="img-fluid w-100" th:src="@{img/dd7.png}" alt="">
-                                <div class="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
-                            </div>
-                            <div class="text-center p-4">
-                                <a class="d-block h5 mb-2" href="">Nước tẩy trang vichy</a>
-                                <span class="text-primary me-1">75.000 ₫</span>
-                                <span class="text-body text-decoration-line-through">125.000 ₫</span>
-                            </div>
-                            <div class="d-flex border-top">
-                                <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
-                                </small>
-                                <small class="w-50 text-center py-2">
-                                    <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6">
-                        <div class="product-item">
-                            <div class="position-relative bg-light overflow-hidden">
-                                <img class="img-fluid w-100" th:src="@{img/dd8.jpg}" alt="">
-                                <div class="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
-                            </div>
-                            <div class="text-center p-4">
-                                <a class="d-block h5 mb-2" href="">Clean Gel</a>
-                                <span class="text-primary me-1">99.000 ₫</span>
-                                <span class="text-body text-decoration-line-through">120.000 ₫</span>
-                            </div>
-                            <div class="d-flex border-top">
-                                <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
-                                </small>
-                                <small class="w-50 text-center py-2">
-                                    <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 text-center">
-                        <!----<a class="btn btn-primary rounded-pill py-3 px-5" href="">More</a>---->
-
-                    </div>
-                </div>
-            </div>
-
-
-            <!--//////////////////////////////////////////////////////////////////////////////////////////-->
-            <div id="tab-3" class="tab-pane fade show p-0">
-                <div class="row g-4">
-                    <div class="col-xl-3 col-lg-4 col-md-6">
-                        <div class="product-item">
-                            <div class="position-relative bg-light overflow-hidden">
-                                <img class="img-fluid w-100" th:src="@{img/1605092721.jpg}" alt="">
-                                <div class="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
-                            </div>
-                            <div class="text-center p-4">
-                                <a class="d-block h5 mb-2" href="">Mặt nạ Seaweed</a>
-                                <span class="text-primary me-1">15.000 ₫-60.000 ₫</span>
-                                <span class="text-body text-decoration-line-through">78.000 ₫</span>
-                            </div>
-                            <div class="d-flex border-top">
-                                <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
-                                </small>
-                                <small class="w-50 text-center py-2">
-                                    <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6">
-                        <div class="product-item">
-                            <div class="position-relative bg-light overflow-hidden">
-                                <img class="img-fluid w-100" th:src="@{img/1646194828.png}" alt="">
-                                <div class="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
-                            </div>
-                            <div class="text-center p-4">
-                                <a class="d-block h5 mb-2" href="">Mặt nạ Foodohouc</a>
-                                <span class="text-primary me-1">11.000 ₫-56.000 ₫</span>
-                                <span class="text-body text-decoration-line-through">100.000 ₫</span>
-                            </div>
-                            <div class="d-flex border-top">
-                                <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
-                                </small>
-                                <small class="w-50 text-center py-2">
-                                    <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6">
-                        <div class="product-item">
-                            <div class="position-relative bg-light overflow-hidden">
-                                <img class="img-fluid w-100" th:src="@{img/1648465504.jpg}" alt="">
-                                <div class="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
-                            </div>
-                            <div class="text-center p-4">
-                                <a class="d-block h5 mb-2" href="">Mặt nạ Collagen Face </a>
-                                <span class="text-primary me-1">9.000 ₫-70.000 ₫</span>
-                                <span class="text-body text-decoration-line-through">80.000 ₫</span>
-                            </div>
-                            <div class="d-flex border-top">
-                                <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
-                                </small>
-                                <small class="w-50 text-center py-2">
-                                    <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6">
-                        <div class="product-item">
-                            <div class="position-relative bg-light overflow-hidden">
-                                <img class="img-fluid w-100" th:src="@{img/1648465523.jpg}" alt="">
-                                <div class="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
-                            </div>
-                            <div class="text-center p-4">
-                                <a class="d-block h5 mb-2" href="">Mặt nạ Jelly</a>
-                                <span class="text-primary me-1">11.000 ₫-66.000 ₫</span>
-                                <span class="text-body text-decoration-line-through">99.000 ₫</span>
-                            </div>
-                            <div class="d-flex border-top">
-                                <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
-                                </small>
-                                <small class="w-50 text-center py-2">
-                                    <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6">
-                        <div class="product-item">
-                            <div class="position-relative bg-light overflow-hidden">
-                                <img class="img-fluid w-100" th:src="@{img/k1.png}" alt="">
-                                <div class="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
-                            </div>
-                            <div class="text-center p-4">
-                                <a class="d-block h5 mb-2" href="">DHC</a>
-                                <span class="text-primary me-1">119.000 ₫</span>
-                                <span class="text-body text-decoration-line-through">220.000 ₫</span>
-                            </div>
-                            <div class="d-flex border-top">
-                                <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
-                                </small>
-                                <small class="w-50 text-center py-2">
-                                    <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6">
-                        <div class="product-item">
-                            <div class="position-relative bg-light overflow-hidden">
-                                <img class="img-fluid w-100" th:src="@{img/k2.jpg}" alt="">
-                                <div class="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
-                            </div>
-                            <div class="text-center p-4">
-                                <a class="d-block h5 mb-2" href="">Tẩy tế bào chết Cocoon</a>
-                                <span class="text-primary me-1">99.000 ₫</span>
-                                <span class="text-body text-decoration-line-through">120.000 ₫</span>
-                            </div>
-                            <div class="d-flex border-top">
-                                <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
-                                </small>
-                                <small class="w-50 text-center py-2">
-                                    <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6">
-                        <div class="product-item">
-                            <div class="position-relative bg-light overflow-hidden">
-                                <img class="img-fluid w-100" th:src="@{img/k3.jpg}" alt="">
-                                <div class="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
-                            </div>
-                            <div class="text-center p-4">
-                                <a class="d-block h5 mb-2" href="">Dầu dưỡng tóc</a>
-                                <span class="text-primary me-1">99.000 ₫</span>
-                                <span class="text-body text-decoration-line-through">112.000 ₫</span>
-                            </div>
-                            <div class="d-flex border-top">
-                                <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
-                                </small>
-                                <small class="w-50 text-center py-2">
-                                    <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6">
-                        <div class="product-item">
-                            <div class="position-relative bg-light overflow-hidden">
-                                <img class="img-fluid w-100" th:src="@{img/sp1.jpg}" alt="">
-                                <div class="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
-                            </div>
-                            <div class="text-center p-4">
-                                <a class="d-block h5 mb-2" href="">Caryophy</a>
-                                <span class="text-primary me-1">170.000 ₫</span>
-                                <span class="text-body text-decoration-line-through">235.000 ₫</span>
-                            </div>
-                            <div class="d-flex border-top">
-                                <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
-                                </small>
-                                <small class="w-50 text-center py-2">
-                                    <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 text-center">
-                        <!------<a class="btn btn-primary rounded-pill py-3 px-5" href="">More</a>---->
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+        <!--
+            PHẦN 2: Khi KHÔNG tìm kiếm (isSearch == false), hiển thị sản phẩm theo danh mục
+        -->
+        <div class="tab-content" th:if="${isSearch == false}">
+            <!-- (A) Nếu KHÔNG lọc => hiển thị nhiều tab (mỗi category 1 tab) -->
+            <div th:if="${selectedCatId == null and selectedSubId == null}"
+                 th:each="category, stat : ${categories}"
+                 th:id="${'tab-' + category.id}"
+                 class="tab-pane fade show p-0"
+                 th:classappend="${stat.index == 0} ? ' active' : ''">
+                <div class="row g-4">
+                    <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp"
+                         data-wow-delay="0.1s"
+                         th:each="product : ${productsByCategory[category.id]}">
+                        <div class="product-item">
+                            <div class="position-relative bg-light overflow-hidden">
+                                <img class="img-fluid w-100" th:src="${product.image}" alt="">
+                            </div>
+                            <div class="text-center p-4">
+                                <a class="d-block h5 mb-2 text-limit"
+                                   th:href="@{'/product-details/' + ${product.id}}"
+                                   th:text="${product.productName}">Tên sản phẩm</a>
+                                <span class="text-primary me-1"
+                                      th:text="${#numbers.formatDecimal(product.price, 1, 'POINT', 0, 'COMMA')} + ' VNĐ'">
+                                        Giá
+                                    </span>
+                            </div>
+                            <div class="d-flex border-top">
+                                <small class="w-50 text-center border-end py-2">
+                                    <a class="text-body" th:href="@{'/product-details/' + ${product.id}}">
+                                        <i class="fa fa-eye text-primary me-2"></i>View detail
+                                    </a>
+                                </small>
+                                <small class="w-50 text-center py-2">
+                                    <a href="#"
+                                       class="btn-add-to-cart text-body"
+                                       th:attr="data-id=${product.id}">
+                                        <i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart
+                                    </a>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- (B) Nếu ĐANG lọc => chỉ hiển thị 1 tab (của activeCategory) -->
+            <div th:if="${selectedCatId != null or selectedSubId != null}"
+                 th:id="${'tab-' + (activeCategory != null ? activeCategory.id : 0)}"
+                 class="tab-pane fade show p-0 active">
+                <div class="row g-4">
+                    <div th:if="${activeCategory != null}"
+                         class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp"
+                         data-wow-delay="0.1s"
+                         th:each="product : ${productsByCategory[activeCategory.id]}">
+                        <div class="product-item">
+                            <div class="position-relative bg-light overflow-hidden">
+                                <img class="img-fluid w-100" th:src="${product.image}" alt="">
+                            </div>
+                            <div class="text-center p-4">
+                                <a class="d-block h5 mb-2 text-limit"
+                                   th:href="@{'/product-details/' + ${product.id}}"
+                                   th:text="${product.productName}">Tên sản phẩm</a>
+                                <span class="text-primary me-1"
+                                      th:text="${#numbers.formatDecimal(product.price, 1, 'POINT', 0, 'COMMA')} + ' VNĐ'">
+                                        Giá
+                                    </span>
+                            </div>
+                            <div class="d-flex border-top">
+                                <small class="w-50 text-center border-end py-2">
+                                    <a class="text-body" th:href="@{'/product-details/' + ${product.id}}">
+                                        <i class="fa fa-eye text-primary me-2"></i>View detail
+                                    </a>
+                                </small>
+                                <small class="w-50 text-center py-2">
+                                    <a href="#"
+                                       class="btn-add-to-cart text-body"
+                                       th:attr="data-id=${product.id}">
+                                        <i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart
+                                    </a>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12" th:if="${activeCategory == null}">
+                        <p>Không tìm thấy danh mục phù hợp.</p>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.tab-content -->
+    </div><!-- /.container -->
+</div><!-- /.layout-product -->
+
