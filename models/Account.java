@@ -32,7 +32,7 @@ public class Account {
         this.createdAt = Instant.now();
     }
 
-    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AccountRole> accountRoles;
 
     public Account() {}
