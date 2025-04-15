@@ -1,4 +1,5 @@
 package edu.uth.wed_san_pham_cham_soc_da.models;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,10 +13,12 @@ public class AccountRole
 
     @ManyToOne
     @JoinColumn(name ="accountId",referencedColumnName = "uID")
+    @JsonIgnore
     private Account account;
 
     @ManyToOne
     @JoinColumn(name = "roleId",referencedColumnName = "uID")
+    @JsonIgnore
     private Roles role;
 
     public AccountRole() {}
