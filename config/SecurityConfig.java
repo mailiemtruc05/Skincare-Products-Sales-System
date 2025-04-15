@@ -1,7 +1,4 @@
 package edu.uth.wed_san_pham_cham_soc_da.config;
-
-import edu.uth.wed_san_pham_cham_soc_da.Service.CustomAccountDetailService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,8 +10,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    @Autowired
-    private CustomAccountDetailService customAccountDetailService;
     @Bean
     BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -24,9 +19,9 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // Tắt CSRF nếu không cần thiết
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/admin","/product","/about","/product-details").permitAll() // Trang chủ và trang đăng nhập không yêu cầu đăng nhập
-                        .requestMatchers("/home/admin2").hasAuthority("ADMIN") // Chỉ ADMIN được vào trang này
-                        .requestMatchers("/shopping-cart", "/pay","/lie","/contact").authenticated() // Yêu cầu đăng nhập
+                        .requestMatchers("/", "/admin","/api/account","/api/account/accounts", "/product", "/about", "/product-details").permitAll() // Trang chủ và trang đăng nhập không yêu cầu đăng nhập
+                        .requestMatchers("/admin2","/api/product","/api/product/").hasAuthority("ADMIN") // Chỉ ADMIN được vào trang này
+                        .requestMatchers("/contact", "/lie", "/shopping-cart", "/pay").authenticated() // Yêu cầu đăng nhập
                         .anyRequest().authenticated() // Các trang khác cũng yêu cầu đăng nhập
                 )
                 .exceptionHandling(exception -> exception
