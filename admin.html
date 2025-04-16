@@ -45,7 +45,7 @@
 <body>
 <div class="container" id="container">
     <div class="form-container sign-up-container">
-        <form th:action="@{/admin}" method="post">
+        <form id="signupForm">
             <h1>Create Account</h1>
             <div class="social-container">
                 <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
@@ -53,10 +53,11 @@
                 <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
             </div>
             <span>or use your email for registration</span>
-            <input type="text" placeholder="Name" />
-            <input type="email" placeholder="Email" name="username" />
-            <input type="password" placeholder="Password" name="password" />
-            <button>Sign Up</button>
+            <input type="text" placeholder="Username" id="username" required/>
+            <input type="password" placeholder="Password" id="password" required/>
+            <input type="email" placeholder="Email" id="email" required/>
+            <input type="text" placeholder="Phone number" id="phone" required/>
+            <button type = "submit">Sign Up</button>
         </form>
     </div>
 
@@ -73,7 +74,6 @@
 
             <input type="text" placeholder="Username" name="username" />
             <input type="password" placeholder="Password" name="password" />
-            <a href="#">Forgot your password?</a>
             <button type="submit" id="signInButton">Sign In</button>
         </form>
     </div>
@@ -123,6 +123,35 @@
                 }, 500);
             }, 1500);
         }
+    });
+
+    document.getElementById("signupForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Ngăn chặn reload trang
+
+        const userData = {
+            username: document.getElementById("username").value,
+            password: document.getElementById("password").value,
+            email: document.getElementById("email").value,
+            phone: document.getElementById("phone").value
+        };
+
+        fetch("http://localhost:8096/api/account", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(userData)
+        })
+            .then(response => response.text())
+            .then(data => {
+                if (data.includes("Đã tồn tại username này rồi!")) {
+                    alert("Đã tồn tại username này rồi");
+                }
+                else {
+                    alert("Đăng ký thành công! Chuyển hướng đến trang đăng nhập.");
+                    window.location.href = "/admin";
+                }
+
+            })
+            .catch(error => console.error("Lỗi:", error));
     });
 </script>
 </body>
