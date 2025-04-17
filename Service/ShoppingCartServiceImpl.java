@@ -1,63 +1,71 @@
 package edu.uth.wed_san_pham_cham_soc_da.Service;
 
 import edu.uth.wed_san_pham_cham_soc_da.models.ShoppingCart;
-
+import edu.uth.wed_san_pham_cham_soc_da.models.Account;
+import edu.uth.wed_san_pham_cham_soc_da.repository.ShoppingCartRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.annotation.SessionScope;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
+import java.util.Optional;
 
-
-@SessionScope
 @Service
 public class ShoppingCartServiceImpl implements ShoppingCartService {
-    Map<Integer, ShoppingCart> maps = new HashMap<>(); //hien thi danh sach gio hang
+
+    @Autowired
+    private ShoppingCartRepository cartRepo;
 
     @Override
-    public void add(ShoppingCart item) {
-        ShoppingCart cartItem =  maps.get(item.getProduct().getId());
-        if (cartItem == null) { // neu khong co
-            maps.put(item.getProduct().getId(), item);
-        }else {
-            cartItem.setQuantity(cartItem.getQuantity() + 1);
-            //khi "add to cart" thi no cong len 1
+    public List<ShoppingCart> getCartItems(Account account) {
+        return cartRepo.findByAccount(account);
+    }
+
+    @Override
+    @Transactional
+    public void addItem(Account account, ShoppingCart item) {
+        // Lấy giỏ hàng hiện tại của tài khoản
+        List<ShoppingCart> currentItems = cartRepo.findByAccount(account);
+        Optional<ShoppingCart> existingItemOpt = currentItems.stream()
+                .filter(i -> i.getProduct().getId().equals(item.getProduct().getId()))
+                .findFirst();
+        if (existingItemOpt.isPresent()) {
+            ShoppingCart existingItem = existingItemOpt.get();
+            existingItem.setQuantity(existingItem.getQuantity() + item.getQuantity());
+            cartRepo.save(existingItem);
+        } else {
+            item.setAccount(account); // Gán tài khoản cho item
+            cartRepo.save(item);
         }
     }
 
     @Override
-    public void remove(int productId) {//xoa thuc thi
-        maps.remove(productId);
+    @Transactional
+    public void removeItem(Account account, int productId) {
+        List<ShoppingCart> currentItems = cartRepo.findByAccount(account);
+        currentItems.stream()
+                .filter(item -> item.getProduct().getId().equals(productId))
+                .findFirst()
+                .ifPresent(cartRepo::delete);
     }
 
-     @Override
-     public ShoppingCart update(int productId, int quantity) {
-         //khi nguoi dung them so luong thi no se update
-        ShoppingCart cartItem = maps.get(productId);
-        cartItem.setQuantity(quantity);
-        return cartItem;
-     }
+    @Override
+    @Transactional
+    public void updateItem(Account account, int productId, int newQuantity) {
+        List<ShoppingCart> currentItems = cartRepo.findByAccount(account);
+        currentItems.stream()
+                .filter(item -> item.getProduct().getId().equals(productId))
+                .findFirst()
+                .ifPresent(item -> {
+                    item.setQuantity(newQuantity);
+                    cartRepo.save(item);
+                });
+    }
 
-     @Override
-     public void clear() {//xoa gio hang
-        maps.clear();
-     }
-
-     @Override
-     public Collection<ShoppingCart> getAllItems() {
-        return maps.values();
-     }
-
-     @Override
-     public int getCount() {//dem so luong
-        return maps.values().size();
-     }
-
-     @Override
-     public double getTotal() {//tinh tong tien
-        return maps.values().stream()
-                .mapToDouble(item -> item.getQuantity() * item.getPrice())
+    @Override
+    public double getTotal(Account account) {
+        return cartRepo.findByAccount(account)
+                .stream()
+                .mapToDouble(item -> item.getPrice() * item.getQuantity())
                 .sum();
-     }
-
+    }
 }
