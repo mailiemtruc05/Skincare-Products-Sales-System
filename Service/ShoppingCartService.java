@@ -1,24 +1,13 @@
 package edu.uth.wed_san_pham_cham_soc_da.Service;
 
 import edu.uth.wed_san_pham_cham_soc_da.models.ShoppingCart;
-
-import java.util.Collection;
+import edu.uth.wed_san_pham_cham_soc_da.models.Account;
+import java.util.List;
 
 public interface ShoppingCartService {
-    //dinh nghia cac ham
-    void add(ShoppingCart item);
-
-    void remove(int productId);
-
-    ShoppingCart update(int productId, int quantity);
-
-    void clear();
-
-    Collection<ShoppingCart> getAllItems();
-
-    int getCount();
-
-    double getTotal();
-
-
+    List<ShoppingCart> getCartItems(Account account);
+    void addItem(Account account, ShoppingCart item);
+    void removeItem(Account account, int productId);
+    void updateItem(Account account, int productId, int newQuantity);
+    double getTotal(Account account);
 }
