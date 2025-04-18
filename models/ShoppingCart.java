@@ -11,6 +11,11 @@ public class ShoppingCart {
     @Column(name = "CartID", nullable = false)
     private Integer id;
 
+    // Liên kết với Account để phân biệt giỏ hàng của từng tài khoản
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "account_id", nullable = false)
+    private Account account;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ProductID", nullable = false)
     private Product product;
@@ -84,5 +89,13 @@ public class ShoppingCart {
 
     public void setTotal(Long total) {
         this.total = total;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 }
