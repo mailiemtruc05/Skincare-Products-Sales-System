@@ -1,43 +1,133 @@
 package edu.uth.wed_san_pham_cham_soc_da.Controllers;
 
-
-import edu.uth.wed_san_pham_cham_soc_da.models.Product;
+import edu.uth.wed_san_pham_cham_soc_da.Service.ProductService;
 import edu.uth.wed_san_pham_cham_soc_da.Service.ShoppingCartService;
+import edu.uth.wed_san_pham_cham_soc_da.Service.AccountService;
+import edu.uth.wed_san_pham_cham_soc_da.models.Product;
 import edu.uth.wed_san_pham_cham_soc_da.models.ShoppingCart;
+import edu.uth.wed_san_pham_cham_soc_da.models.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
-import java.util.List;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("/shopping-cart")
 public class ShoppingcartControllers {
-//    @RequestMapping("/shopping-cart")
-//    public String shoppingCart() { // Đổi tên phương thức cho hợp lệ
-//            return "shopping-cart";
-//        }
-    @Autowired
-    private ShoppingCartService shoppingCartService;
 
-    // Hiển thị trang giỏ hàng
-    @GetMapping
-    public String shoppingCart(Model model) {
-        List<ShoppingCart> cartItems = shoppingCartService.getCartItems();
-        model.addAttribute("cartItems", cartItems);
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private ShoppingCartService cartService;
+
+    @Autowired
+    private AccountService accountService;
+
+    @RequestMapping("/shopping-cart")
+    public String shoppingCart(Model model, Principal principal) {
+        // Lấy tài khoản đăng nhập dựa trên tên người dùng (username)
+        Account account = accountService.findByUsername(principal.getName());
+        model.addAttribute("CARTITEMS", cartService.getCartItems(account));
+        model.addAttribute("TOTAL", cartService.getTotal(account));
         return "shopping-cart";
     }
 
-    // Xử lý thêm sản phẩm vào giỏ hàng
-    @PostMapping("/add")
-    public String addToCart(@RequestParam("productId") Integer productId) {
-        shoppingCartService.addProductToCart(productId);
-        return "redirect:/shopping-cart";
+    @GetMapping(value = "/shopping-cart/addAjax/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> addCartAjax(@PathVariable("id") int id,
+                                           Principal principal) {
+        // Lấy user hiện tại
+        Account account = accountService.findByUsername(principal.getName());
+        // Lấy sản phẩm
+        Product product = productService.getProductById(id);
+
+        Map<String, Object> resp = new HashMap<>();
+        if (product != null) {
+            // Thêm vào giỏ
+            ShoppingCart item = new ShoppingCart();
+            item.setProduct(product);
+            item.setProductName(product.getProductName());
+            item.setPrice(product.getPrice().longValue());
+            item.setQuantity(1);
+            cartService.addItem(account, item);
+
+            // Lấy tổng tiền mới
+            double cartTotal = cartService.getTotal(account);
+
+            resp.put("success", true);
+            resp.put("message", "Sản phẩm đã được thêm vào giỏ hàng.");
+            resp.put("cartTotal", cartTotal);
+        } else {
+            resp.put("success", false);
+            resp.put("message", "Không tìm thấy sản phẩm.");
+        }
+        return resp;
+    }
+
+
+
+    @GetMapping(value = "/shopping-cart/remove/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String,Object> removeItemAjax(@PathVariable int id, Principal principal) {
+        Account account = accountService.findByUsername(principal.getName());
+        cartService.removeItem(account, id);
+        double cartTotal = cartService.getTotal(account);
+        return Map.of(
+                "productId", id,
+                "cartTotal", cartTotal
+        );
+    }
+
+    @GetMapping(value = "/shopping-cart/increase/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> increaseItemAjax(@PathVariable("id") int id, Principal principal) {
+        Account account = accountService.findByUsername(principal.getName());
+        // Tăng 1
+        cartService.addItem(account, new ShoppingCart() {{
+            setProduct(productService.getProductById(id));
+            setQuantity(1);
+        }});
+        // Lấy lại item vừa cập nhật
+        ShoppingCart item = cartService.getCartItems(account).stream()
+                .filter(i -> i.getProduct().getId().equals(id))
+                .findFirst().orElseThrow();
+        double cartTotal = cartService.getTotal(account);
+        Map<String, Object> resp = new HashMap<>();
+        resp.put("productId", id);
+        resp.put("quantity", item.getQuantity());
+        resp.put("lineTotal", item.getTotal());
+        resp.put("cartTotal", cartTotal);
+        return resp;
+    }
+
+    @GetMapping(value = "/shopping-cart/decrease/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String,Object> decreaseItemAjax(@PathVariable int id, Principal principal) {
+        Account account = accountService.findByUsername(principal.getName());
+        // Giảm 1 (không dưới 1)
+        int newQty = cartService.getCartItems(account).stream()
+                .filter(i -> i.getProduct().getId().equals(id))
+                .findFirst()
+                .map(i -> Math.max(i.getQuantity()-1, 1))
+                .orElse(1);
+        cartService.updateItem(account, id, newQty);
+        ShoppingCart item = cartService.getCartItems(account).stream()
+                .filter(i -> i.getProduct().getId().equals(id))
+                .findFirst().orElseThrow();
+        double cartTotal = cartService.getTotal(account);
+        return Map.of(
+                "productId", id,
+                "quantity", item.getQuantity(),
+                "lineTotal", item.getTotal(),
+                "cartTotal", cartTotal
+        );
     }
 }
-
-
