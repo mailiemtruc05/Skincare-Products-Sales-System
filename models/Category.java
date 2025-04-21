@@ -1,5 +1,6 @@
 package edu.uth.wed_san_pham_cham_soc_da.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Nationalized;
 import java.util.List;
@@ -16,6 +17,7 @@ public class Category {
     private String cname;
 
     @OneToMany(mappedBy = "cid", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<SubCategory> subCategories;
 
     // Constructor mặc định
