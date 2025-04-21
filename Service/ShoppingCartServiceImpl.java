@@ -13,17 +13,17 @@ import java.util.Optional;
 public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Autowired
-    private ShoppingCartRepository cartRepo;
-
+    private ShoppingCartRepository cartRepo; //tu dong lay ra lop ket noi csld de dụng trong
+    //de dung trong cac ham them, xoa, sua, lay trong du lieu gio hang
     @Override
     public List<ShoppingCart> getCartItems(Account account) {
         return cartRepo.findByAccount(account);
     }
-
+    //lay danh sach san pham trong gio hang cua tai khoan dang dang nhap
     @Override
     @Transactional
     public void addItem(Account account, ShoppingCart item) {
-        // Lấy giỏ hàng hiện tại của tài khoản
+        // Lấy giỏ hàng hiện tại của tài khoản gan vao currentItems
         List<ShoppingCart> currentItems = cartRepo.findByAccount(account);
         Optional<ShoppingCart> existingItemOpt = currentItems.stream()
                 .filter(i -> i.getProduct().getId().equals(item.getProduct().getId()))
@@ -33,7 +33,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             existingItem.setQuantity(existingItem.getQuantity() + item.getQuantity());
             cartRepo.save(existingItem);
         } else {
-            item.setAccount(account); // Gán tài khoản cho item
+            item.setAccount(account);
             cartRepo.save(item);
         }
     }
