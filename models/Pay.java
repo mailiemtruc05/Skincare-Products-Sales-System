@@ -2,20 +2,23 @@ package edu.uth.wed_san_pham_cham_soc_da.models;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.Nationalized;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime; // Thêm import LocalDateTime
+import java.util.List;
 
 @Entity
 public class Pay {
+
     @Id
-    @Column(name = "MaKH", nullable = false, length = 6)
-    private String maKH;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "MaDH")
+    private Long maDH;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "UserID", nullable = false)
-    private edu.uth.wed_san_pham_cham_soc_da.models.Account userID;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "ProductID", nullable = false) // Liên kết với Product
-    private Product product;
+    private Account userID;
 
     @Nationalized
     @Column(name = "TenKhachHang", nullable = false, length = 50)
@@ -31,19 +34,39 @@ public class Pay {
     @Column(name = "PTTT", nullable = false, length = 50)
     private String pttt;
 
-    public String getMaKH() {
-        return maKH;
+    @Nationalized
+    @Column(name = "DiaChi", length = 100)
+    private String diaChi;
+
+    @Column(name = "NgaySinh")
+    private LocalDate ngaySinh;
+
+    @Column(name = "GiaTien")
+    private Long giaTien;
+
+    // Danh sách chi tiết đơn hàng
+    @OneToMany(mappedBy = "pay", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderDetail> orderDetails;
+
+    // Thêm trường createdAt để lưu thời gian tạo đơn hàng
+    @CreationTimestamp
+    @Column(name = "CreatedAt", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    // Getters và Setters
+    public Long getMaDH() {
+        return maDH;
     }
 
-    public void setMaKH(String maKH) {
-        this.maKH = maKH;
+    public void setMaDH(Long maDH) {
+        this.maDH = maDH;
     }
 
-    public edu.uth.wed_san_pham_cham_soc_da.models.Account getUserID() {
+    public Account getUserID() {
         return userID;
     }
 
-    public void setUserID(edu.uth.wed_san_pham_cham_soc_da.models.Account userID) {
+    public void setUserID(Account userID) {
         this.userID = userID;
     }
 
@@ -79,4 +102,43 @@ public class Pay {
         this.pttt = pttt;
     }
 
+    public String getDiaChi() {
+        return diaChi;
+    }
+
+    public void setDiaChi(String diaChi) {
+        this.diaChi = diaChi;
+    }
+
+    public LocalDate getNgaySinh() {
+        return ngaySinh;
+    }
+
+    public void setNgaySinh(LocalDate ngaySinh) {
+        this.ngaySinh = ngaySinh;
+    }
+
+    public Long getGiaTien() {
+        return giaTien;
+    }
+
+    public void setGiaTien(Long giaTien) {
+        this.giaTien = giaTien;
+    }
+
+    public List<OrderDetail> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(List<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }
