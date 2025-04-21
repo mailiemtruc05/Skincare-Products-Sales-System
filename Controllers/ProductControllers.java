@@ -3,9 +3,9 @@ package edu.uth.wed_san_pham_cham_soc_da.Controllers;
 import edu.uth.wed_san_pham_cham_soc_da.models.Category;
 import edu.uth.wed_san_pham_cham_soc_da.models.Product;
 import edu.uth.wed_san_pham_cham_soc_da.models.SubCategory;
-import edu.uth.wed_san_pham_cham_soc_da.Service.CategoryService;
-import edu.uth.wed_san_pham_cham_soc_da.Service.ProductService;
-import edu.uth.wed_san_pham_cham_soc_da.Service.SubCategoryService;
+import edu.uth.wed_san_pham_cham_soc_da.Service.CategoryServiceImpl;
+import edu.uth.wed_san_pham_cham_soc_da.Service.ProductServiceImpl;
+import edu.uth.wed_san_pham_cham_soc_da.Service.SubCategoryServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,13 +18,13 @@ import java.util.stream.Collectors;
 @Controller
 public class ProductControllers {
 
-    private final ProductService productService;
-    private final CategoryService categoryService;
-    private final SubCategoryService subCategoryService;
+    private final ProductServiceImpl productService;
+    private final CategoryServiceImpl categoryService;
+    private final SubCategoryServiceImpl subCategoryService;
 
-    public ProductControllers(ProductService productService,
-                              CategoryService categoryService,
-                              SubCategoryService subCategoryService) {
+    public ProductControllers(ProductServiceImpl productService,
+                              CategoryServiceImpl categoryService,
+                              SubCategoryServiceImpl subCategoryService) {
         this.productService = productService;
         this.categoryService = categoryService;
         this.subCategoryService = subCategoryService;

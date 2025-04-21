@@ -1,7 +1,7 @@
 package edu.uth.wed_san_pham_cham_soc_da.Controllers;
 
 import edu.uth.wed_san_pham_cham_soc_da.models.Product;
-import edu.uth.wed_san_pham_cham_soc_da.Service.ProductService;
+import edu.uth.wed_san_pham_cham_soc_da.Service.ProductServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,9 +11,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Controller
 public class ProductdetailsControllers {
-    private final ProductService productService;
+    private final ProductServiceImpl productService;
 
-    public ProductdetailsControllers(ProductService productService) {
+    public ProductdetailsControllers(ProductServiceImpl productService) {
         this.productService = productService;
     }
 

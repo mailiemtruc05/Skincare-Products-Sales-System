@@ -2,8 +2,8 @@
 package edu.uth.wed_san_pham_cham_soc_da.Controllers;
 import edu.uth.wed_san_pham_cham_soc_da.models.Category;
 import edu.uth.wed_san_pham_cham_soc_da.models.Product;
-import edu.uth.wed_san_pham_cham_soc_da.Service.CategoryService;
-import edu.uth.wed_san_pham_cham_soc_da.Service.ProductService;
+import edu.uth.wed_san_pham_cham_soc_da.Service.CategoryServiceImpl;
+import edu.uth.wed_san_pham_cham_soc_da.Service.ProductServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import java.util.*;
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class HomeController {
-    private final CategoryService categoryService;
-    private final ProductService productService;
+    private final CategoryServiceImpl categoryService;
+    private final ProductServiceImpl productService;
 
-    public HomeController(CategoryService categoryService, ProductService productService) {
+    public HomeController(CategoryServiceImpl categoryService, ProductServiceImpl productService) {
         this.categoryService = categoryService;
         this.productService = productService;
     }
