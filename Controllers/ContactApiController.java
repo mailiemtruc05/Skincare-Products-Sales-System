@@ -51,4 +51,9 @@ public class ContactApiController {
                 Map.of("status", "success", "message", "Liên hệ đã được gửi thành công.")
         );
     }
+    @GetMapping("/chitiet")
+    public ResponseEntity<?> getAllContacts() {
+        return ResponseEntity.ok(contactService.getAllContacts());
+    }
+
 }
