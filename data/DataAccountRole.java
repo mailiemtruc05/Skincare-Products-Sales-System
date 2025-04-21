@@ -3,23 +3,22 @@ package edu.uth.wed_san_pham_cham_soc_da.data;
 import org.springframework.core.annotation.Order;
 import edu.uth.wed_san_pham_cham_soc_da.models.*;
 import edu.uth.wed_san_pham_cham_soc_da.repository.*;
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Arrays;
 import java.util.List;
 
-@Order(3)
 @Configuration
 public class DataAccountRole {
 
     @Bean
-    CommandLineRunner initAccountRoleData(AccountRoleRepository accountRoleRepo,
+    @Order(3) // ✅ Đảm bảo chạy sau DataRole (@Order 2)
+    ApplicationRunner initAccountRoleData(AccountRoleRepository accountRoleRepo,
                                           AccountRepository accountRepo,
                                           RoleRepository roleRepo) {
         return args -> {
-            // Kiểm tra nếu bảng đã có dữ liệu thì không thêm nữa
             if (accountRoleRepo.count() > 0) {
                 System.out.println("ℹ️ Bảng account_role đã có dữ liệu, bỏ qua việc insert.");
                 return;
