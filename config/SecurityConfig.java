@@ -19,7 +19,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // Tắt CSRF nếu không cần thiết
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/admin","/api/account","/api/account/accounts", "/product", "/about", "/product-details").permitAll() // Trang chủ và trang đăng nhập không yêu cầu đăng nhập
+                        .requestMatchers("/", "/admin","/api/account","/api/account/accounts", "/product", "/about", "/product-details", "/history").permitAll() // Trang chủ và trang đăng nhập không yêu cầu đăng nhập
                         .requestMatchers("/admin2","/api/product","/api/product/").hasAuthority("ADMIN") // Chỉ ADMIN được vào trang này
                         .requestMatchers("/contact", "/lie", "/shopping-cart", "/pay").authenticated() // Yêu cầu đăng nhập
                         .anyRequest().authenticated() // Các trang khác cũng yêu cầu đăng nhập
