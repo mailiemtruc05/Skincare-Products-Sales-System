@@ -70,25 +70,6 @@
 <script th:src="@{/lib/waypoints/waypoints.min.js}"></script>
 <script th:src="@{/lib/owlcarousel/owl.carousel.min.js}"></script>
 <script th:src="@{/js/main.js}"></script>
-<script>
-    $(document).ready(function() {
-        // Bắt sự kiện click cho nút "Thêm vào giỏ hàng"
-        $(".btn-add-to-cart").click(function(e) {
-            e.preventDefault(); // Chặn load trang
-            const productId = $(this).data("id");
-
-            // Gọi GET AJAX đến endpoint addAjax
-            $.getJSON(`/shopping-cart/addAjax/${productId}`, function(resp) {
-                if (resp.success) {
-                    alert(resp.message); // Thông báo thành công
-                    // Nếu cần, cập nhật hiển thị giỏ hàng, v.v.
-                } else {
-                    alert(resp.message); // Báo lỗi
-                }
-            });
-        });
-    });
-</script>
 
 </body>
 </html>
