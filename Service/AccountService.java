@@ -14,4 +14,6 @@ public interface AccountService {
     Account findById(Integer id);
     List<Account> findAllAccounts();
     Optional<Account> findAccountByUsername(String username);
+    void updateAccount(Account account);
+
 }
