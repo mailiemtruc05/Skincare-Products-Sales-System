@@ -25,7 +25,7 @@
             <a class="text-body ms-3" href=""><i class="fab fa-instagram"></i></a>
             <span class="text-body ms-3" sec:authorize="isAuthenticated()">
                 Hi!
-           <b><span sec:authentication="name"></span></b>
+                <a href="/account"><b><span sec:authentication="name"></span></b></a>
             </span>
             <span class="text-body ms-3" sec:authorize="isAnonymous()">
                <b>"Vui lòng đăng nhập!"</b>
