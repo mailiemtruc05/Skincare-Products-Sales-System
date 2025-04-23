@@ -71,4 +71,10 @@ public class AccountServiceiml implements AccountService {
         return aRepo.findAll();
     }
 
+    @Override
+    public void updateAccount(Account account) {
+        aRepo.save(account);
+    }
+
+
 }
