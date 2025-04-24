@@ -1,12 +1,16 @@
 package edu.uth.wed_san_pham_cham_soc_da.Service;
 
-import edu.uth.wed_san_pham_cham_soc_da.models.*;
+import edu.uth.wed_san_pham_cham_soc_da.models.Account;
+import edu.uth.wed_san_pham_cham_soc_da.models.Pay;
+import edu.uth.wed_san_pham_cham_soc_da.models.OrderDetail;
+import edu.uth.wed_san_pham_cham_soc_da.models.ShoppingCart;
 import edu.uth.wed_san_pham_cham_soc_da.repository.PayRepository;
 import edu.uth.wed_san_pham_cham_soc_da.repository.ShoppingCartRepository;
 import edu.uth.wed_san_pham_cham_soc_da.repository.OrderDetailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,9 +26,21 @@ public class PayServiceImpl implements PayService {
     @Autowired
     private OrderDetailRepository orderDetailRepository;
 
+    /**
+     * Xử lý thanh toán, lưu đơn hàng và chi tiết, xóa giỏ hàng.
+     * @param account    tài khoản người mua
+     * @param payForm    thông tin khách hàng trên form
+     * @param cartItems  danh sách món trong giỏ
+     * @param discount   số tiền giảm (có thể null)
+     * @return Pay       đối tượng đơn hàng đã lưu với tổng tiền cuối cùng
+     */
     @Override
-    public Pay processPayment(Account account, Pay payForm, List<ShoppingCart> cartItems) {
-        // Tạo đơn hàng (Pay)
+    public Pay processPayment(Account account,
+                              Pay payForm,
+                              List<ShoppingCart> cartItems,
+                              BigDecimal discount) {
+
+        // Tạo đơn hàng cơ bản
         Pay newOrder = new Pay();
         newOrder.setUserID(account);
         newOrder.setTenKhachHang(payForm.getTenKhachHang());
@@ -34,40 +50,42 @@ public class PayServiceImpl implements PayService {
         newOrder.setDiaChi(payForm.getDiaChi());
         newOrder.setNgaySinh(payForm.getNgaySinh());
 
-        // Tính tổng tiền
-        long tongTien = cartItems.stream()
+        // Tính tổng gốc
+        long total = cartItems.stream()
                 .mapToLong(item -> item.getPrice() * item.getQuantity())
                 .sum();
-        newOrder.setGiaTien(tongTien);
 
-        // Lưu đơn hàng trước để có ID
+        // Áp dụng giảm giá nếu có
+        long finalTotal = total;
+        if (discount != null) {
+            finalTotal = total - discount.longValue();
+        }
+        newOrder.setGiaTien(finalTotal);
+
+        // Lưu đơn hàng để có ID
         payRepository.save(newOrder);
 
         // Lưu chi tiết đơn hàng
         List<OrderDetail> orderDetails = new ArrayList<>();
         for (ShoppingCart item : cartItems) {
-            OrderDetail orderDetail = new OrderDetail();
-            orderDetail.setPay(newOrder);
-            orderDetail.setTenSanPham(item.getProduct().getProductName());
-            orderDetail.setSoLuong(item.getQuantity());
-            orderDetail.setDonGia(item.getPrice());
-            orderDetail.setThanhTien(item.getPrice() * item.getQuantity());
+            OrderDetail od = new OrderDetail();
+            od.setPay(newOrder);
+            od.setTenSanPham(item.getProduct().getProductName());
+            od.setSoLuong(item.getQuantity());
+            od.setDonGia(item.getPrice());
+            od.setThanhTien(item.getPrice() * item.getQuantity());
 
-            // Lưu OrderDetail và thêm vào danh sách
-            orderDetailRepository.save(orderDetail);
-            orderDetails.add(orderDetail);
+            orderDetailRepository.save(od);
+            orderDetails.add(od);
         }
-
-        // Gán danh sách chi tiết đơn hàng cho Pay
         newOrder.setOrderDetails(orderDetails);
 
-        // Cập nhật đơn hàng sau khi có orderDetails
+        // Cập nhật đơn hàng với chi tiết
         payRepository.save(newOrder);
 
-        // Xoá giỏ hàng
+        // Xóa giỏ hàng
         shoppingCartRepository.deleteAll(cartItems);
 
-        // Trả về đơn hàng đã được xử lý và lưu
         return newOrder;
     }
 }
