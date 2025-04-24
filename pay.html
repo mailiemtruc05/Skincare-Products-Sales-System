@@ -57,21 +57,37 @@
 
 
 
-                        <!-- Tổng thành tiền luôn hiển thị bên dưới -->
+                        <!-- Tổng thành tiền và mã giảm giá -->
+                        <!-- Tổng thành tiền và mã giảm giá -->
                         <ul class="list-group mb-3">
+                            <!-- Mã giảm giá (luôn có khung) -->
+                            <li class="list-group-item d-flex justify-content-between
+             text-success">
+                                <span>Mã giảm giá:</span>
+                                <strong th:text="${couponCode != null
+                     ? couponCode
+                     : '–'}">–</strong>
+                            </li>
+
+                            <!-- Số tiền giảm -->
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Số tiền giảm:</span>
+                                <strong th:text="${discount != null
+                     ? #numbers.formatDecimal(discount,0,'COMMA',0,'POINT') + ' Đ'
+                     : '0 Đ'}">0 Đ</strong>
+                            </li>
+
+                            <!-- Tổng thành tiền -->
                             <li class="list-group-item d-flex justify-content-between">
                                 <span>Tổng thành tiền</span>
-                                <strong th:text="${#numbers.formatDecimal(total, 0, 'COMMA', 0, 'POINT')} + ' Đ'">0 Đ</strong>
-
+                                <strong th:text="${discountedTotal != null
+                     ? #numbers.formatDecimal(discountedTotal,0,'COMMA',0,'POINT') + ' Đ'
+                     : #numbers.formatDecimal(total,0,'COMMA',0,'POINT') + ' Đ'}">
+                                    0 Đ
+                                </strong>
                             </li>
                         </ul>
 
-
-                        <!-- Mã khuyến mãi (nếu có) -->
-                        <div class="input-group">
-                            <input type="text" class="form-control border-radius" placeholder="Mã khuyến mãi" />
-                            <button type="button" class="btn btn-secondary">Xác nhận</button>
-                        </div>
                     </div>
                 </div>
 
