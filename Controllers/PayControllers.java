@@ -1,20 +1,17 @@
 package edu.uth.wed_san_pham_cham_soc_da.Controllers;
 
-import edu.uth.wed_san_pham_cham_soc_da.models.Account;
-import edu.uth.wed_san_pham_cham_soc_da.models.Pay;
-import edu.uth.wed_san_pham_cham_soc_da.models.OrderDetail;
-import edu.uth.wed_san_pham_cham_soc_da.models.ShoppingCart;
+import edu.uth.wed_san_pham_cham_soc_da.models.*;
 import edu.uth.wed_san_pham_cham_soc_da.repository.ShoppingCartRepository;
 import edu.uth.wed_san_pham_cham_soc_da.Service.AccountServiceiml;
+import edu.uth.wed_san_pham_cham_soc_da.Service.PayService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import edu.uth.wed_san_pham_cham_soc_da.Service.PayService;
-
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.List;
-
 
 @Controller
 @RequestMapping("/pay")
@@ -26,69 +23,98 @@ public class PayControllers {
     @Autowired
     private AccountServiceiml accountService;
 
-
     @Autowired
     private PayService payService;
 
-    // Hiển thị trang thanh toán với thông tin giỏ hàng và thông tin khách hàng đã đăng nhập
     @GetMapping
-    public String showPaymentPage(Model model, Principal principal) {
-        // Lấy thông tin tài khoản đang đăng nhập
+    public String showPaymentPage(Model model,
+                                  Principal principal,
+                                  HttpSession session) {
+        // Lấy account & cart
         String username = principal.getName();
         Account account = accountService.findByUsername(username);
-
-        // Lấy danh sách sản phẩm trong giỏ hàng theo tài khoản
         List<ShoppingCart> cartItems = shoppingCartRepository.findByAccount(account);
 
-        // Tính tổng tiền
+        // Tính total gốc
         long total = cartItems.stream()
-                .mapToLong(item -> item.getPrice() * item.getQuantity())
+                .mapToLong(i -> i.getPrice() * i.getQuantity())
                 .sum();
 
-        // Tạo đối tượng Pay và gán thông tin khách hàng từ Account
+        // Coupon từ session
+        String     couponCode = (String)    session.getAttribute("couponCode");
+        BigDecimal discount    = (BigDecimal)session.getAttribute("couponDiscount");
+
+        // Tính total đã giảm
+        Double discountedTotal = null;
+        if (discount != null) {
+            discountedTotal = total - discount.doubleValue();
+        }
+
+        // Chuẩn bị Pay object
         Pay pay = new Pay();
-        // Giả sử bạn dùng username làm tên hiển thị, và phone, email từ Account
         pay.setTenKhachHang(account.getUsername());
         pay.setSoDienThoai(account.getPhone());
         pay.setEmail(account.getEmail());
-        // Nếu có thêm thông tin khác, bạn có thể gán thêm
 
-        // Đưa dữ liệu lên view
-        model.addAttribute("cartItems", cartItems);
-        model.addAttribute("total", total);
-        model.addAttribute("account", account);
-        model.addAttribute("pay", pay);
+        // Đẩy lên model
+        model.addAttribute("cartItems",       cartItems);
+        model.addAttribute("total",           total);
+        model.addAttribute("couponCode",      couponCode);
+        model.addAttribute("discount",        discount);
+        model.addAttribute("discountedTotal", discountedTotal);
+        model.addAttribute("account",         account);
+        model.addAttribute("pay",             pay);
 
-        return "pay"; // trả về file pay.html trong thư mục templates
+        return "pay";
     }
 
-    // Xử lý thanh toán sau khi submit form
     @PostMapping
-    public String processPayment(@ModelAttribute("pay") Pay pay, Model model, Principal principal) {
+    public String processPayment(@ModelAttribute("pay") Pay payForm,
+                                 Model model,
+                                 Principal principal,
+                                 HttpSession session) {
+        // Lấy account & cart
         String username = principal.getName();
         Account account = accountService.findByUsername(username);
         List<ShoppingCart> cartItems = shoppingCartRepository.findByAccount(account);
 
         if (cartItems.isEmpty()) {
             model.addAttribute("error", "Giỏ hàng của bạn đang trống!");
+            // reload dữ liệu (như GET)
+            model.addAttribute("cartItems", cartItems);
+            model.addAttribute("total", 0L);
+            model.addAttribute("couponCode", session.getAttribute("couponCode"));
+            model.addAttribute("discount",    session.getAttribute("couponDiscount"));
+            model.addAttribute("discountedTotal", null);
             return "pay";
         }
 
-        // Gọi service xử lý thanh toán và lưu đơn hàng → nhận lại đối tượng đã lưu
-        Pay savedPay = payService.processPayment(account, pay, cartItems);
+        // Tính total gốc
+        long total = cartItems.stream()
+                .mapToLong(i -> i.getPrice() * i.getQuantity())
+                .sum();
+        // Coupon
+        String     couponCode      = (String)    session.getAttribute("couponCode");
+        BigDecimal discount         = (BigDecimal)session.getAttribute("couponDiscount");
+        // Tính total đã giảm
+        Double discountedTotal = null;
+        if (discount != null) {
+            discountedTotal = total - discount.doubleValue();
+        }
 
-        // Lấy chi tiết đơn hàng từ đối tượng đã lưu
+        // Lưu đơn hàng
+        Pay savedPay = payService.processPayment(account, payForm, cartItems,discount);
         List<OrderDetail> orderDetails = savedPay.getOrderDetails();
 
-        // Tính tổng tiền
-        long total = cartItems.stream().mapToLong(item -> item.getPrice() * item.getQuantity()).sum();
+        // Đẩy xuống paymentSuccess
+        model.addAttribute("order",          savedPay);
+        model.addAttribute("orderDetails",   orderDetails);
+        model.addAttribute("total",          total);
+        model.addAttribute("couponCode",     couponCode);
+        model.addAttribute("discount",       discount);
+        model.addAttribute("discountedTotal",discountedTotal);
+        model.addAttribute("account",        account);
 
-        // Truyền dữ liệu cho view
-        model.addAttribute("order", savedPay);
-        model.addAttribute("orderDetails", orderDetails);
-        model.addAttribute("total", total);
-        model.addAttribute("account", account);
-
-        return "paymentSuccess"; // Trả về trang paymentSuccess.html
+        return "paymentSuccess";
     }
 }
