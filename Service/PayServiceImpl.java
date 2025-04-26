@@ -7,12 +7,14 @@ import edu.uth.wed_san_pham_cham_soc_da.models.ShoppingCart;
 import edu.uth.wed_san_pham_cham_soc_da.repository.PayRepository;
 import edu.uth.wed_san_pham_cham_soc_da.repository.ShoppingCartRepository;
 import edu.uth.wed_san_pham_cham_soc_da.repository.OrderDetailRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PayServiceImpl implements PayService {
@@ -83,9 +85,26 @@ public class PayServiceImpl implements PayService {
         // Cập nhật đơn hàng với chi tiết
         payRepository.save(newOrder);
 
-        // Xóa giỏ hàng
-        shoppingCartRepository.deleteAll(cartItems);
-
         return newOrder;
     }
+
+    @Override
+    public Optional<Pay> findByMaDH(Long maDH) {
+        return payRepository.findByMaDH(maDH);
+    }
+
+    @Override
+    @Transactional
+    public void cancelOrder(Long maDH) {
+        Optional<Pay> optionalPay = payRepository.findByMaDH(maDH);
+        if (optionalPay.isPresent()) {
+            Pay pay = optionalPay.get();
+            List<OrderDetail> details = pay.getOrderDetails();
+            if (details != null && !details.isEmpty()) {
+                orderDetailRepository.deleteAll(details);  // Xóa chi tiết
+            }
+            payRepository.delete(pay);  // Sau đó mới xóa đơn hàng
+        }
+    }
+
 }
