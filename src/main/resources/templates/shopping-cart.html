@@ -87,7 +87,7 @@
 
 <section class="ftco-section ftco-cart">
     <div class="container">
-        <div th:if="${couponError}" class="alert alert-warning" th:text="${couponError}"></div>
+        <div th:if="${couponError}" th:text="${couponError}"></div>
         <div class="mb-3 coupon-actions">
             <!-- Nút Săn Sale -->
             <a th:href="@{/coupons}" class="btn">Săn Sale</a>
