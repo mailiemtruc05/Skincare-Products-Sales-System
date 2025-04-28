@@ -84,6 +84,8 @@ public class CouponController {
                 session.setAttribute("couponCode", c.getCode());
                 session.setAttribute("couponDiscount", discount);
                 ra.addFlashAttribute("message", "Áp dụng mã " + code + " thành công!");
+
+                cartService.applyCoupon(account, c.getCode(), discount.longValue());
             }
         } else {
             ra.addFlashAttribute("error", "Không tìm thấy mã: " + code);
