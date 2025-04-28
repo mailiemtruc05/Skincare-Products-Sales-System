@@ -3,15 +3,17 @@ package edu.uth.wed_san_pham_cham_soc_da.models;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Nationalized;
 
+import java.util.List;
+
 @Entity
-@Table(name = "ShoppingCart") // Đảm bảo tên bảng chính xác
+@Table(name = "ShoppingCart")
 public class ShoppingCart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CartID", nullable = false)
     private Integer id;
 
-    // Liên kết với Account để phân biệt giỏ hàng của từng tài khoản
+    //Nhiều sản phẩm trong giỏ hàng thuộc về 1 account
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "account_id", nullable = false)
     private Account account;
@@ -32,6 +34,39 @@ public class ShoppingCart {
 
     @Column(name = "Total") // Không dùng ColumnDefault
     private Long total;
+
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Coupon> coupons;
+
+    @Column(name = "coupon_code")
+    private String couponCode;
+
+    @Column(name = "discount_amount")
+    private Long discountAmount;
+
+    public String getCouponCode() {
+        return couponCode;
+    }
+
+    public void setCouponCode(String couponCode) {
+        this.couponCode = couponCode;
+    }
+
+    public Long getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public void setDiscountAmount(Long discountAmount) {
+        this.discountAmount = discountAmount;
+    }
+
+    public List<Coupon> getCoupons() {
+        return coupons;
+    }
+
+    public void setCoupons(List<Coupon> coupons) {
+        this.coupons = coupons;
+    }
 
     @PrePersist
     @PreUpdate
