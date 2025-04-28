@@ -26,8 +26,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     @Transactional //để đảm bảo tính toàn vẹn khi thêm, xóa, cập nhật.
-    public void addItem(Account account, ShoppingCart item) { //Thêm một mục vào giỏ hàng
-        //Lấy danh sách sản phẩm hiện có của account từ sql
+    public void addItem(Account account, ShoppingCart item) { //Thêm sản phẩm vào giỏ hàng
+        //Lấy danh sách sản phẩm trong giỏ hiện có của account từ sql
         List<ShoppingCart> currentItems = cartRepo.findByAccount(account);
         //Tìm xem có sản phẩm nào cùng productId không
         Optional<ShoppingCart> existingItemOpt = currentItems.stream()
@@ -46,9 +46,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    @Transactional //để đảm bảo tính toàn vẹn khi thêm, xóa, cập nhật.
+    @Transactional
     public void removeItem(Account account, int productId) {
-        //Lấy danh sách giỏ hàng hiện tại của account
+        //Lấy danh sách sản phẩm trong giỏ hiện có của account từ sql
         List<ShoppingCart> currentItems = cartRepo.findByAccount(account);
         //Tìm mục cần xóa theo productId
         currentItems.stream()
@@ -61,9 +61,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     @Transactional
     public void updateItem(Account account, int productId, int newQuantity) {
-        //Lấy danh sách giỏ hàng hiện tại của account
+        //Lấy danh sách sản phẩm trong giỏ hiện có của account từ sql
         List<ShoppingCart> currentItems = cartRepo.findByAccount(account);
-        //Tìm mục cần update theo productId
+        //Tìm sản phẩm cần update theo productId
         currentItems.stream()
                 .filter(item -> item.getProduct().getId().equals(productId))
                 .findFirst()
@@ -81,5 +81,17 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 .stream()
                 .mapToDouble(item -> item.getPrice() * item.getQuantity())
                 .sum();
+    }
+
+    @Override
+    @Transactional
+    public void applyCoupon(Account account, String couponCode, long discountAmount) {
+        List<ShoppingCart> items = cartRepo.findByAccount(account);
+        if (!items.isEmpty()) {
+            ShoppingCart firstItem = items.get(0);
+            firstItem.setCouponCode(couponCode);
+            firstItem.setDiscountAmount(discountAmount);
+            cartRepo.save(firstItem);
+        }
     }
 }
